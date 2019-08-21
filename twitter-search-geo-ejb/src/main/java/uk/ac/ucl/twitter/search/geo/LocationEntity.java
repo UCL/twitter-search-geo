@@ -3,6 +3,7 @@ package uk.ac.ucl.twitter.search.geo;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.NamedQuery;
 
 /**
  * Entity class that keeps a record of the counts and last ID collected per
@@ -11,7 +12,11 @@ import javax.persistence.Enumerated;
  * @author David Guzman {@literal d.guzman at ucl.ac.uk}
  */
 @Entity
-public class LocationCountSinceEntity {
+@NamedQuery(
+  name="LocationEntity.findByLocation",
+  query="SELECT l FROM LocationEntity l WHERE l.location = :location"
+)
+public class LocationEntity {
 
   /**
    * The name of the geographical location. To be used as identifier for
@@ -31,9 +36,17 @@ public class LocationCountSinceEntity {
   private String sinceId;
 
   /**
+   * Named query to find LocationEntity by Location name.
+   */
+  public static final String QUERY_FIND_BY_LOCATION =
+    "LocationEntity.findByLocation";
+
+  public static final String PARAM_LOCATION = "location";
+
+  /**
    * No args constructor for JPA.
    */
-  public LocationCountSinceEntity() { }
+  public LocationEntity() { }
 
   /**
    * Getter for the geographical location.

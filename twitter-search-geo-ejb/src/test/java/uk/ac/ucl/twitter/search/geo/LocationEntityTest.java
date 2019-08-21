@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Unit tests for {@see uk.ac.ucl.twitter.search.geo.LocationCountSinceEntity}
+ * Unit tests for {@see uk.ac.ucl.twitter.search.geo.LocationEntity}
  * based on the recommendations listed in
  * <a href="http://mjremijan.blogspot.com/2016/06/unit-testing-jpa-annotationsstop_20.html">
  * http://mjremijan.blogspot.com/2016/06/unit-testing-jpa-annotationsstop_20.html
@@ -20,20 +20,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author David Guzman {@literal d.guzman at ucl.ac.uk}
  */
-public class LocationCountSinceEntityTest {
+public class LocationEntityTest {
 
   @Test
   public void hasEntityAnnotation() {
-    Class<LocationCountSinceEntity> clEntity = LocationCountSinceEntity.class;
+    Class<LocationEntity> clEntity = LocationEntity.class;
     Entity annotation = clEntity.getAnnotation(Entity.class);
-    assertNotNull(annotation, "Expect LocationCountSinceEntity to be annotated as Entity");
+    assertNotNull(annotation, "Expect LocationEntity to be annotated as Entity");
     assertEquals("", annotation.name(), "Expect name to be empty");
   }
 
   @Test
   public void hasRequiredFields() {
-    Class<LocationCountSinceEntity> clEntity = LocationCountSinceEntity.class;
-    assertAll("Expect LocationCountSinceEntity to have all required fields",
+    Class<LocationEntity> clEntity = LocationEntity.class;
+    assertAll("Expect LocationEntity to have all required fields",
       () -> assertNotNull(clEntity.getDeclaredField("location")),
       () -> assertNotNull(clEntity.getDeclaredField("count")),
       () -> assertNotNull(clEntity.getDeclaredField("sinceId"))
@@ -42,8 +42,8 @@ public class LocationCountSinceEntityTest {
 
   @Test
   public void hasRequiredMethods() {
-    Class<LocationCountSinceEntity> clEntity = LocationCountSinceEntity.class;
-    assertAll("Expect LocationCountSinceEntity to have all required methods",
+    Class<LocationEntity> clEntity = LocationEntity.class;
+    assertAll("Expect LocationEntity to have all required methods",
       () -> assertNotNull(clEntity.getDeclaredMethod("getLocation")),
       () -> assertNotNull(clEntity.getDeclaredMethod("setLocation", Location.class)),
       () -> assertNotNull(clEntity.getDeclaredMethod("getSinceId")),
@@ -55,7 +55,7 @@ public class LocationCountSinceEntityTest {
 
   @Test
   public void testLocationField() throws NoSuchFieldException {
-    Class<LocationCountSinceEntity> clEntity = LocationCountSinceEntity.class;
+    Class<LocationEntity> clEntity = LocationEntity.class;
     Field field = clEntity.getDeclaredField("location");
     assertNotNull(field.getAnnotation(Enumerated.class));
   }
