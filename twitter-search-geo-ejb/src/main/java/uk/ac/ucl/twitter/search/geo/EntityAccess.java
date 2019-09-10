@@ -5,15 +5,16 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Stateless
 @LocalBean
-public class LocationEntityAccess {
+public class EntityAccess {
 
   @PersistenceContext
   private EntityManager entityManager;
 
-  public LocationEntity findByLocation(final Location location) {
+  public LocationEntity findLocationEntityByLocation(final Location location) {
     final TypedQuery<LocationEntity> typedQuery = entityManager
       .createNamedQuery(
         LocationEntity.QUERY_FIND_BY_LOCATION,
@@ -21,5 +22,14 @@ public class LocationEntityAccess {
       );
     typedQuery.setParameter(LocationEntity.PARAM_LOCATION, location);
     return typedQuery.getSingleResult();
+  }
+
+  public List<ScheduleAppLocationEntity> findAllScheduleAppLocationEntity() {
+    final TypedQuery<ScheduleAppLocationEntity> typedQuery = entityManager
+      .createNamedQuery(
+        ScheduleAppLocationEntity.QUERY_FIND_ALL,
+        ScheduleAppLocationEntity.class
+      );
+    return typedQuery.getResultList();
   }
 }

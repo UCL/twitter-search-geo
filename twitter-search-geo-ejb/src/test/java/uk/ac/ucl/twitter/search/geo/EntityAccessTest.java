@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-public class LocationEntityAccessTest {
+public class EntityAccessTest {
 
   @Tested
-  private LocationEntityAccess instance;
+  private EntityAccess instance;
 
   @Injectable
   private EntityManager entityManager;
@@ -24,7 +24,7 @@ public class LocationEntityAccessTest {
    */
   @Test
   public void testFindByLocation(@Mocked TypedQuery<LocationEntity> mock) {
-    instance.findByLocation(Location.Aberdeen);
+    instance.findLocationEntityByLocation(Location.Aberdeen);
     new Verifications() {{
       String parameter;
       Location parameterValue;
