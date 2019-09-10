@@ -22,8 +22,8 @@
     <maven.ejb.plugin.version>3.0.1</maven.ejb.plugin.version>
     <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
     <javax.javaee-api.version>8.0.1</javax.javaee-api.version>
-    <jmockit.version>1.47</jmockit.version>
-    <junit.jupiter.version>5.5.1</junit.jupiter.version>
+    <jmockit.version>1.48</jmockit.version>
+    <junit.jupiter.version>5.5.2</junit.jupiter.version>
   </properties>
 
   <dependencies>
@@ -45,6 +45,11 @@
       <version>${jmockit.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.security</groupId>
+      <artifactId>oauth2-client</artifactId>
+      <version>2.29.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -65,6 +70,14 @@
           <argLine>
             -javaagent:${settings.localRepository}/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar -Duser.region=GB
           </argLine>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs</artifactId>
+        <version>3.1.12</version>
+        <configuration>
+          <excludeFilterFile>spotbugsFilter.xml</excludeFilterFile>
         </configuration>
       </plugin>
     </plugins>
