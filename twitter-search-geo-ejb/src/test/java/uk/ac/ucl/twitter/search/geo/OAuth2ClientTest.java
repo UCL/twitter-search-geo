@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
+import mockit.Verifications;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -104,6 +105,10 @@ public class OAuth2ClientTest {
           .withRequestBody(equalTo("grant_type=client_credentials"))
       );
       wireMockServer.stop();
+
+      new Verifications() {{
+        tokenCache.setBearer("applicationName", "AAAA%2FAAA%3DAAAAAAAA");
+      }};
     }
 
   }

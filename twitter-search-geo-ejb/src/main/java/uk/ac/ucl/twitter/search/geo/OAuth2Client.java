@@ -3,6 +3,7 @@ package uk.ac.ucl.twitter.search.geo;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -114,7 +115,12 @@ public class OAuth2Client {
           new MediaType("application", "x-www-form-urlencoded", "UTF-8")
         )
       );
-    return response.readEntity(String.class);
+    BearerTokenEntity entity = JsonbBuilder.create().fromJson(
+      response.readEntity(String.class),
+      BearerTokenEntity.class
+    );
+    return entity.getAccessToken();
+    // return response.readEntity(String.class);
   }
 
 }

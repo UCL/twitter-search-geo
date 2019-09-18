@@ -26,6 +26,7 @@
     <jmockit.version>1.48</jmockit.version>
     <junit.jupiter.version>5.5.2</junit.jupiter.version>
     <wiremock.version>2.24.1</wiremock.version>
+    <yassoon.version>1.0.5</yassoon.version>
   </properties>
 
   <dependencies>
@@ -64,6 +65,13 @@
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock-jre8</artifactId>
       <version>${wiremock.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.eclipse/yasson -->
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>yasson</artifactId>
+      <version>${yassoon.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
