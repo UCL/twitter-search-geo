@@ -88,10 +88,12 @@
       <version>${yassoon.version}</version>
       <scope>test</scope>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
     <dependency>
-      <groupId>org.glassfish.jersey.security</groupId>
-      <artifactId>oauth2-client</artifactId>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
       <version>${jersey.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
