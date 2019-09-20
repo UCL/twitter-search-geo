@@ -47,7 +47,7 @@ public class LocationEntityTest {
       () -> assertNotNull(clEntity.getDeclaredMethod("getLocation")),
       () -> assertNotNull(clEntity.getDeclaredMethod("setLocation", Location.class)),
       () -> assertNotNull(clEntity.getDeclaredMethod("getSinceId")),
-      () -> assertNotNull(clEntity.getDeclaredMethod("setSinceId", String.class)),
+      () -> assertNotNull(clEntity.getDeclaredMethod("setSinceId", long.class)),
       () -> assertNotNull(clEntity.getDeclaredMethod("getCount")),
       () -> assertNotNull(clEntity.getDeclaredMethod("setCount", int.class))
     );

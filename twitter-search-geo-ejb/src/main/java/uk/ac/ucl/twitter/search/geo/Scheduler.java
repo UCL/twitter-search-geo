@@ -48,7 +48,7 @@ public class Scheduler {
   @Timeout
   public void callSearchClient(Timer timer) {
     AppLocationTimerConfig appConfig = (AppLocationTimerConfig) timer.getInfo();
-    searchClient.search(
+    searchClient.runSearch(
       appConfig.getLocation(), appConfig.getApplicationName()
     );
   }

@@ -3,6 +3,7 @@ package uk.ac.ucl.twitter.search.geo;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 
 /**
@@ -22,6 +23,7 @@ public class LocationEntity {
    * The name of the geographical location. To be used as identifier for
    * updates.
    */
+  @Id
   @Enumerated(EnumType.STRING)
   private Location location;
 
@@ -33,7 +35,7 @@ public class LocationEntity {
   /**
    * The last ID used as a reference for the collection of tweets.
    */
-  private String sinceId;
+  private long sinceId;
 
   /**
    * Named query to find LocationEntity by Location name.
@@ -84,7 +86,7 @@ public class LocationEntity {
    * Getter for the last ID used as a reference for the collection of tweets.
    * @return The last ID used.
    */
-  public String getSinceId() {
+  public long getSinceId() {
     return sinceId;
   }
 
@@ -92,7 +94,7 @@ public class LocationEntity {
    * Setter for the last ID used as a reference for the collection of tweets.
    * @param s The last ID used
    */
-  public void setSinceId(final String s) {
+  public void setSinceId(final long s) {
     sinceId = s;
   }
 }

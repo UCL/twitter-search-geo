@@ -32,4 +32,8 @@ public class EntityAccess {
       );
     return typedQuery.getResultList();
   }
+
+  public void updateLocationEntity(final LocationEntity locationEntity) {
+    entityManager.merge(locationEntity);
+  }
 }

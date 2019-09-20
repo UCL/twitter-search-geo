@@ -6,6 +6,7 @@ import javax.inject.Named;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -33,15 +34,33 @@ public class SearchClient {
   @Inject
   private EntityAccess entityAccess;
 
-  public void search(final Location location, final String applicationName) {
-    final LocationEntity locationEntity = entityAccess.findLocationEntityByLocation(location);
+  public void runSearch(final Location loc, final String applicationName) {
+    final LocationEntity locationEntity = entityAccess
+      .findLocationEntityByLocation(loc);
     final String sinceDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
-    webTarget.queryParam("query", "since:" + sinceDate )
-      .queryParam("geocode", location.getLatitude() + "," + location.getLongitude() + "," + location.getRadius())
+    final Response response = webTarget
+      .queryParam(
+        "query",
+        "since:" + sinceDate
+      ).queryParam(
+        "geocode",
+        loc.getLatitude() + "," + loc.getLongitude() + "," + loc.getRadius()
+      )
       .queryParam("count", NUMBER_OF_TWEETS)
       .queryParam("since_id", locationEntity.getSinceId())
       .request(MediaType.APPLICATION_JSON_TYPE)
-      .header("Authorization", "Bearer " + oAuth2Client.getBearerToken(applicationName));
+      .header(
+        "Authorization",
+        "Bearer " + oAuth2Client.getBearerToken(applicationName)
+      ).get();
+    if (Response.Status.OK.getStatusCode() == response.getStatus()) {
+      FileHandler fileHandler = FileHandler.createFileHandler(loc);
+      long maxId = fileHandler.writeStatuses(response.readEntity(String.class));
+      locationEntity.setSinceId(maxId);
+      entityAccess.updateLocationEntity(locationEntity);
+    } else {
+      // log or throw
+    }
   }
 
 }
