@@ -18,7 +18,9 @@ public final class FileHandler {
     if (fileHandlerMap.containsKey(location)) {
       return fileHandlerMap.get(location);
     } else {
-      return fileHandlerMap.put(location, new FileHandler());
+      FileHandler fileHandler = new FileHandler();
+      fileHandlerMap.put(location, fileHandler);
+      return fileHandler;
     }
   }
 

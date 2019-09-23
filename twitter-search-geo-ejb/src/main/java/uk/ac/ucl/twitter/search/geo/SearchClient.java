@@ -9,6 +9,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+
+import static java.util.logging.Logger.getLogger;
 
 @Named
 @Dependent
@@ -59,7 +62,12 @@ public class SearchClient {
       locationEntity.setSinceId(maxId);
       entityAccess.updateLocationEntity(locationEntity);
     } else {
-      // log or throw
+      getLogger(SearchClient.class.getName())
+        .log(
+          Level.INFO,
+          "Call to API did not return OK. Status code: {0}",
+          response.getStatus()
+        );
     }
   }
 
