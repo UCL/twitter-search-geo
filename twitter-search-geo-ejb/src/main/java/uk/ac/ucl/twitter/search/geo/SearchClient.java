@@ -7,6 +7,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -91,10 +92,20 @@ public class SearchClient {
         "Bearer " + oAuth2Client.getBearerToken(applicationName)
       ).get();
     if (Response.Status.OK.getStatusCode() == response.getStatus()) {
-      FileHandler fileHandler = FileHandler.createFileHandler(loc);
-      long maxId = fileHandler.writeStatuses(response.readEntity(String.class));
-      locationEntity.setSinceId(maxId);
-      entityAccess.updateLocationEntity(locationEntity);
+      FileHandler fileHandler = FileHandler.createFileHandler(
+        sinceDate + "_" + loc.name()
+      );
+      try {
+        StatusData.Metadata metadata = fileHandler.writeStatuses(
+          response.readEntity(String.class)
+        );
+        locationEntity.setSinceId(metadata.getMaxId());
+        locationEntity.setCount(metadata.getCount());
+        entityAccess.updateLocationEntity(locationEntity);
+      } catch (IOException e) {
+        getLogger(SearchClient.class.getName())
+          .log(Level.SEVERE, "Could not write response to file.", e);
+      }
     } else {
       getLogger(SearchClient.class.getName())
         .log(
