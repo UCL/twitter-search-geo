@@ -13,30 +13,64 @@ import java.util.logging.Level;
 
 import static java.util.logging.Logger.getLogger;
 
+/**
+ * Queries Twitter standard search API to retrieve a collection of tweets
+ * based on geographic locations.
+ *
+ * @author David Guzman {@literal d.guzman at ucl.ac.uk}
+ * @since 1.0
+ */
 @Named
 @Dependent
 public class SearchClient {
 
+  /**
+   * Host of the standard search api. Read from a configuration property to
+   * facilitate testing.
+   */
   private final String searchResourceHost = ClientConfiguration
     .getFromSystemOrEnvOrElse(
       "SEARCH_HOST",
       "https://api.twitter.com"
     );
 
+  /**
+   * Path to the standard search resource.
+   */
   private static final String SEARCH_RESOURCE_PATH =  "/1.1/search/tweets.json";
 
+  /**
+   * Number of tweets to return per page.
+   */
   private static final int NUMBER_OF_TWEETS = 100;
 
+  /**
+   * An instance of WebTarget pointing to the standard search resource.
+   */
   private final WebTarget webTarget = ClientBuilder.newClient()
     .target(searchResourceHost)
     .path(SEARCH_RESOURCE_PATH);
 
+  /**
+   * Provides the OAuth2 bearer token.
+   */
   @Inject
   private OAuth2Client oAuth2Client;
 
+  /**
+   * Provides access to query and update entities in database.
+   */
   @Inject
   private EntityAccess entityAccess;
 
+  /**
+   * Runs a query on Twitter's search API. Results are passed to FileHandler
+   * to be persisted as text files and the max ID in the collection of tweets
+   * saved in the database for pagination of subsequent queries.
+   * @param loc             The geographic location.
+   * @param applicationName The name of the application. Used as authentication
+   *                        context.
+   */
   public void runSearch(final Location loc, final String applicationName) {
     final LocationEntity locationEntity = entityAccess
       .findLocationEntityByLocation(loc);
