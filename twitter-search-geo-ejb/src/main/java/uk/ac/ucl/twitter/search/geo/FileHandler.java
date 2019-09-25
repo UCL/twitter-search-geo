@@ -88,6 +88,11 @@ public final class FileHandler {
     return statusData.getMetaData();
   }
 
+  public void deleteFile() throws IOException {
+    fileHandlerMap.remove(path.getFileName().toString());
+    Files.deleteIfExists(path);
+  }
+
   private StatusData extractStatus(final String jsonResponse) {
     final JsonParser jsonParser = Json.createParser(
       new StringReader(jsonResponse)
@@ -98,7 +103,13 @@ public final class FileHandler {
       boolean isKeyName = event.equals(JsonParser.Event.KEY_NAME);
       if (isKeyName && jsonParser.getString().equals("statuses")) {
         jsonParser.next();
-        statusData.setStatuses(jsonParser.getString());
+        final String comma = openOption.equals(StandardOpenOption.APPEND) ? "," : "";
+        final String status = comma + jsonParser
+          .getArray()
+          .toString()
+          .trim()
+          .replaceAll("^\\[|\\]$","");
+        statusData.setStatuses(status);
       } else if (isKeyName && jsonParser.getString().equals("max_id")) {
         jsonParser.next();
         statusData.getMetaData().setMaxId(jsonParser.getLong());
