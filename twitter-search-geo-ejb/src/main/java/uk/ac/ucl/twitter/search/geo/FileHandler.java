@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public final class FileHandler {
   /**
    * The directory where the JSON files are saved.
    */
-  private static final String SEARCH_GEO_DIR = ClientConfiguration
+  public static final String SEARCH_GEO_DIR = ClientConfiguration
     .getFromSystemOrEnvOrElse(
       "SEARCH_GEO_DIR",
       System.getProperty("java.io.tmpdir")
@@ -47,6 +48,18 @@ public final class FileHandler {
    * Current state of the JSON file. Defaults to StandardOpenOption.CREATE
    */
   private StandardOpenOption openOption = StandardOpenOption.CREATE;
+
+  /**
+   * Left square bracket character.
+   */
+  private static final byte[] LEFT_SQUARE_BRACKET = "["
+    .getBytes(StandardCharsets.UTF_8);
+
+  /**
+   * Right square bracket character.
+   */
+  private static final byte[] RIGHT_SQUARE_BRACKET = "]"
+    .getBytes(StandardCharsets.UTF_8);
 
   private FileHandler(final String jsonFile) {
     path = Paths.get(SEARCH_GEO_DIR, jsonFile);
@@ -78,6 +91,9 @@ public final class FileHandler {
    */
   public StatusData.Metadata writeStatuses(final String jsonResponse)
     throws IOException {
+    if (openOption.equals(StandardOpenOption.READ)) {
+      throw new IOException("File has been closed and set as read-only.");
+    }
     final StatusData statusData = extractStatus(jsonResponse);
     Files.write(
       path,
@@ -88,6 +104,34 @@ public final class FileHandler {
     return statusData.getMetaData();
   }
 
+  /**
+   * Closes the JSON file to prevent new content to be appended.
+   * @throws IOException if the file cannot be read of written
+   */
+  public void closeFile() throws IOException {
+    byte[] jsonByteContent = Files.readAllBytes(path);
+    final int combinedLength = LEFT_SQUARE_BRACKET.length
+      + jsonByteContent.length + LEFT_SQUARE_BRACKET.length;
+    byte[] combinedByteContent = Arrays.copyOf(
+      LEFT_SQUARE_BRACKET, combinedLength
+    );
+    int offset = LEFT_SQUARE_BRACKET.length;
+    System.arraycopy(
+      jsonByteContent, 0, combinedByteContent, offset, jsonByteContent.length
+    );
+    offset += jsonByteContent.length;
+    System.arraycopy(
+      RIGHT_SQUARE_BRACKET, 0, combinedByteContent, offset,
+      RIGHT_SQUARE_BRACKET.length
+    );
+    Files.write(path, combinedByteContent, StandardOpenOption.WRITE);
+    openOption = StandardOpenOption.READ;
+  }
+
+  /**
+   * Deletes a JSON file from the collection.
+   * @throws IOException If an I/O error occurs
+   */
   public void deleteFile() throws IOException {
     fileHandlerMap.remove(path.getFileName().toString());
     Files.deleteIfExists(path);
@@ -103,12 +147,13 @@ public final class FileHandler {
       boolean isKeyName = event.equals(JsonParser.Event.KEY_NAME);
       if (isKeyName && jsonParser.getString().equals("statuses")) {
         jsonParser.next();
-        final String comma = openOption.equals(StandardOpenOption.APPEND) ? "," : "";
+        final String comma = openOption
+          .equals(StandardOpenOption.APPEND) ? "," : "";
         final String status = comma + jsonParser
           .getArray()
           .toString()
           .trim()
-          .replaceAll("^\\[|\\]$","");
+          .replaceAll("^\\[|\\]$", "");
         statusData.setStatuses(status);
       } else if (isKeyName && jsonParser.getString().equals("max_id")) {
         jsonParser.next();
