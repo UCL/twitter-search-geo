@@ -1,5 +1,7 @@
 package uk.ac.ucl.twitter.search.geo;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Utilities for passing or reading configuration properties.
  *
@@ -40,6 +42,11 @@ public interface ClientConfiguration {
       value = System.getenv(key);
     }
     return (value != null) ? value : defaultValue;
+  }
+
+  static byte[] getPropertyFromSystem(final String key) {
+    return System.getProperty(key)
+      .getBytes(StandardCharsets.UTF_8);
   }
 
 }

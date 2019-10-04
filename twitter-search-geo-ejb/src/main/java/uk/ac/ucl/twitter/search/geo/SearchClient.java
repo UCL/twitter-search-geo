@@ -92,7 +92,8 @@ public class SearchClient {
         "Bearer " + oAuth2Client.getBearerToken(applicationName)
       ).get();
     if (Response.Status.OK.getStatusCode() == response.getStatus()) {
-      FileHandler fileHandler = FileHandler.createFileHandler(
+      FileHandlerFactory fileHandlerFactory = FileHandlerFactory.newInstance();
+      FileHandler fileHandler = fileHandlerFactory.createFileHandler(
         sinceDate + "_" + loc.name()
       );
       try {

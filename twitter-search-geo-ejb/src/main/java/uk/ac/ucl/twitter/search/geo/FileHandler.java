@@ -10,8 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Provides access to JSON files where the data is persisted. Supports creation,
@@ -24,25 +22,47 @@ import java.util.Map;
 public final class FileHandler {
 
   /**
-   * Internal store of FileHandler instances. One instance per date per
-   * location.
+   * Configuration key for SEARCH_GEO_DIR.
    */
-  private static Map<String, FileHandler> fileHandlerMap = new HashMap<>();
+  public static final String SEARCH_GEO_KEY = "SEARCH_GEO_DIR";
 
   /**
    * The directory where the JSON files are saved.
    */
+  @Deprecated
   public static final String SEARCH_GEO_DIR = ClientConfiguration
     .getFromSystemOrEnvOrElse(
-      "SEARCH_GEO_DIR",
+      SEARCH_GEO_KEY,
       System.getProperty("java.io.tmpdir")
     );
+
+  /**
+   * Searches system properties and environment properties for the name of the
+   * directory where the JSON files are saved. It can be configured with the
+   * key SEARCH_GEO_DIR.
+   * @return The name of the directory where the JSON files are saved. Defaults
+   * to java.io.tmpdir
+   */
+  public static String getSearchGeoDir() {
+    return ClientConfiguration
+      .getFromSystemOrEnvOrElse(
+        SEARCH_GEO_KEY,
+        System.getProperty("java.io.tmpdir"));
+  }
 
   /**
    * The Path to the JSON file. File name xpected to be a string in the format
    * YYYY-MM-DD_Location.
    */
   private final Path path;
+
+  /**
+   * Obtains the path to the file.
+   * @return A Path object of the file
+   */
+  public Path getPath() {
+    return path;
+  }
 
   /**
    * Current state of the JSON file. Defaults to StandardOpenOption.CREATE
@@ -61,25 +81,8 @@ public final class FileHandler {
   private static final byte[] RIGHT_SQUARE_BRACKET = "]"
     .getBytes(StandardCharsets.UTF_8);
 
-  private FileHandler(final String jsonFile) {
+  FileHandler(final String jsonFile) {
     path = Paths.get(SEARCH_GEO_DIR, jsonFile);
-  }
-
-  /**
-   * Obtains an instance of FileHandler. Restricted to one instance per date
-   * per location.
-   * @param todayAndLocation A String combining the date and location in the
-   *                         format YYYY-MM-DD_Location
-   * @return An instance of FileHandler
-   */
-  public static FileHandler createFileHandler(final String todayAndLocation) {
-    if (fileHandlerMap.containsKey(todayAndLocation)) {
-      return fileHandlerMap.get(todayAndLocation);
-    } else {
-      FileHandler fileHandler = new FileHandler(todayAndLocation);
-      fileHandlerMap.put(todayAndLocation, fileHandler);
-      return fileHandler;
-    }
   }
 
   /**
@@ -129,12 +132,14 @@ public final class FileHandler {
   }
 
   /**
-   * Deletes a JSON file from the collection.
+   * Deletes a JSON file from the filesystem. It does not remove the reference
+   * from the cache which has to be removed manually.
+   * @return The dateAndLocation reference to the file
    * @throws IOException If an I/O error occurs
    */
-  public void deleteFile() throws IOException {
-    fileHandlerMap.remove(path.getFileName().toString());
+  public String deleteFile() throws IOException {
     Files.deleteIfExists(path);
+    return path.getFileName().toString();
   }
 
   private StatusData extractStatus(final String jsonResponse) {
