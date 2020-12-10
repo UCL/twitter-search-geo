@@ -1,6 +1,7 @@
 package uk.ac.ucl.twitter.search.geo;
 
-import javax.json.bind.annotation.JsonbProperty;
+
+import jakarta.json.bind.annotation.JsonbProperty;
 
 public class BearerTokenEntity {
 

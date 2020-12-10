@@ -3,9 +3,9 @@ package uk.ac.ucl.twitter.search.geo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.ejb.Lock;
-import javax.ejb.LockType;
-import javax.ejb.Singleton;
+import jakarta.ejb.Lock;
+import jakarta.ejb.LockType;
+import jakarta.ejb.Singleton;
 import java.lang.reflect.Method;
 
 public class TokenCacheTest {

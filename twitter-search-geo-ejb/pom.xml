@@ -21,22 +21,22 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.ejb.plugin.version>3.0.1</maven.ejb.plugin.version>
     <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
-    <javax.javaee-api.version>8.0.1</javax.javaee-api.version>
-    <javax.json.version>1.1.4</javax.json.version>
-    <jersey.version>2.29.1</jersey.version>
+    <jakarta.jakartaee-api.version>9.0.0</jakarta.jakartaee-api.version>
+    <jakarta.json.version>2.0.0</jakarta.json.version>
+    <jersey.version>3.0.0</jersey.version>
     <jmockit.version>1.48</jmockit.version>
     <junit.jupiter.version>5.5.2</junit.jupiter.version>
     <slf4j.version>1.7.28</slf4j.version>
     <wiremock.version>2.24.1</wiremock.version>
-    <yassoon.version>1.0.5</yassoon.version>
+    <yassoon.version>2.0.1</yassoon.version>
   </properties>
 
   <dependencies>
-    <!-- https://mvnrepository.com/artifact/javax/javaee-api -->
+    <!-- https://mvnrepository.com/artifact/jakarta.platform/jakarta.jakartaee-api -->
     <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
-      <version>${javax.javaee-api.version}</version>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-api</artifactId>
+      <version>${jakarta.jakartaee-api.version}</version>
       <scope>provided</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
@@ -53,11 +53,11 @@
       <version>${jmockit.version}</version>
       <scope>test</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.glassfish/javax.json -->
+    <!-- https://mvnrepository.com/artifact/org.glassfish/jakarta.json -->
     <dependency>
       <groupId>org.glassfish</groupId>
-      <artifactId>javax.json</artifactId>
-      <version>${javax.json.version}</version>
+      <artifactId>jakarta.json</artifactId>
+      <version>${jakarta.json.version}</version>
       <scope>test</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.inject/jersey-hk2 -->

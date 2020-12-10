@@ -1,6 +1,6 @@
 package uk.ac.ucl.twitter.search.geo;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Factory methods for FileHandler.

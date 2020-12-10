@@ -1,7 +1,8 @@
 package uk.ac.ucl.twitter.search.geo;
 
-import javax.json.Json;
-import javax.json.stream.JsonParser;
+
+import jakarta.json.Json;
+import jakarta.json.stream.JsonParser;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;

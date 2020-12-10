@@ -1,10 +1,10 @@
 package uk.ac.ucl.twitter.search.geo;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 
 /**
  * Entity class that keeps a record of the counts and last ID collected per

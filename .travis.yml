@@ -1,8 +1,0 @@
-branches:
-  only:
-    - master
-    - develop
-language: java
-jdk:
-  - openjdk8
-

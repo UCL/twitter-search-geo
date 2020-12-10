@@ -1,8 +1,8 @@
 package uk.ac.ucl.twitter.search.geo;
 
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.Singleton;
+import jakarta.ejb.ConcurrencyManagement;
+import jakarta.ejb.ConcurrencyManagementType;
+import jakarta.ejb.Singleton;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -68,7 +68,7 @@ public class FileReference {
     return fileHandlerMap
       .values()
       .stream()
-      .map(f -> f.getPath())
+      .map(FileHandler::getPath)
       .collect(Collectors.toList());
   }
 

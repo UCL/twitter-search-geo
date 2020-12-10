@@ -1,8 +1,9 @@
 package uk.ac.ucl.twitter.search.geo;
 
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
