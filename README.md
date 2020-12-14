@@ -1,7 +1,6 @@
 # twitter-search-geo
 
-[![Build Status](https://travis-ci.org/UCL/twitter-search-geo.svg?branch=master)](https://travis-ci.org/UCL/twitter-search-geo)
-
+![Java CI with Maven](https://github.com/UCL/twitter-search-geo/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 ## Background
 
@@ -17,7 +16,7 @@
 
 ## Installation
 
-### Requirements
+### Requirements
 
 ### Configuration
 
@@ -46,7 +45,7 @@ Please keep the use of 3rd party runtime libraries to a minimum. The application
 ## Copyright
 
 
-&copy; 2019 UCL ([https://www.ucl.ac.uk](https://www.ucl.ac.uk)). 
+&copy; 2019 UCL ([https://www.ucl.ac.uk](https://www.ucl.ac.uk)).
 
 [eclipse-glassfish-5]: https://projects.eclipse.org/projects/ee4j.glassfish/downloads
 [checkstyle]: https://checkstyle.org/

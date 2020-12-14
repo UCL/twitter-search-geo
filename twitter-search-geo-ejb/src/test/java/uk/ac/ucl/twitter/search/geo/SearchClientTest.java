@@ -3,6 +3,7 @@ package uk.ac.ucl.twitter.search.geo;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import mockit.Expectations;
 import mockit.Injectable;
+import mockit.Mocked;
 import mockit.Tested;
 import mockit.Verifications;
 import org.junit.jupiter.api.AfterEach;
@@ -49,7 +50,8 @@ public class SearchClientTest {
     public void testRunSearchWhenOk(
       @Tested SearchClient instance,
       @Injectable OAuth2Client oAuth2Client,
-      @Injectable EntityAccess entityAccess
+      @Injectable EntityAccess entityAccess,
+      @Mocked FileHandlerFactory fileHandlerFactory
     ) {
       WireMockServer wireMockServer = new WireMockServer(wireMockPort);
       wireMockServer.start();

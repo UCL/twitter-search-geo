@@ -2,8 +2,8 @@ package uk.ac.ucl.twitter.search.geo;
 
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 
 import java.lang.reflect.Field;
 

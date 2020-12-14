@@ -1,6 +1,5 @@
 package uk.ac.ucl.twitter.search.geo;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -24,22 +23,18 @@ public class FileHandlerTest {
 
   private final String fileName = LocalDate.now().format(DateTimeFormatter.ISO_DATE) + "_" + Location.Aberdeen.name();
 
-  @AfterEach
-  public void removeTempFiles() throws IOException {
-    FileHandler.createFileHandler(fileName).deleteFile();
-  }
-
   @Test
   public void testWriteStatuses() throws IOException {
-    FileHandler instance = FileHandler.createFileHandler(fileName);
+    FileHandler instance = new FileHandler(fileName);
     StatusData.Metadata metadata = instance.writeStatuses(jsonResponse);
     Assertions.assertEquals(2, metadata.getCount());
     Assertions.assertEquals(1125490788736032800L, metadata.getMaxId());
+    instance.deleteFile();
   }
 
   @Test
   public void testWriteStatusesAndAppend() throws IOException {
-    FileHandler instance = FileHandler.createFileHandler(fileName);
+    FileHandler instance = new FileHandler(fileName);
     StatusData.Metadata metadata = instance.writeStatuses(jsonResponse);
     Assertions.assertEquals(2, metadata.getCount());
     Assertions.assertEquals(1125490788736032800L, metadata.getMaxId());
@@ -52,11 +47,12 @@ public class FileHandlerTest {
     String content = new String(Files.readAllBytes(path));
     long count = content.chars().filter(c -> c == ',').count();
     Assertions.assertEquals(3, count);
+    instance.deleteFile();
   }
 
   @Test
   public void testCloseFile() throws IllegalAccessException, IOException {
-    FileHandler instance = FileHandler.createFileHandler(fileName);
+    FileHandler instance = new FileHandler(fileName);
     instance.writeStatuses(jsonResponse);
     instance.writeStatuses(jsonAddResponse);
     instance.closeFile();
@@ -74,23 +70,7 @@ public class FileHandlerTest {
     String closedFileContents = new String(fileBytes);
     Assertions.assertTrue(closedFileContents.startsWith("["));
     Assertions.assertTrue(closedFileContents.endsWith("]"));
-  }
-
-  @SuppressWarnings("unchecked")
-  @Test
-  public void testOneFileHandlerPerDateAndLocation() throws IllegalAccessException {
-    Field[] fields = FileHandler.class.getDeclaredFields();
-    final String internalType = "java.util.Map<java.lang.String, uk.ac.ucl.twitter.search.geo.FileHandler>";
-    Field internalMap = Arrays
-      .stream(fields)
-      .filter(f -> f.getGenericType().getTypeName().equals(internalType))
-      .findFirst().get();
-    internalMap.setAccessible(true);
-    FileHandler.createFileHandler(fileName);
-    FileHandler.createFileHandler(fileName + "2");
-    final Object o = internalMap.get(FileHandler.createFileHandler(fileName));
-    java.util.Map<java.lang.String, uk.ac.ucl.twitter.search.geo.FileHandler> m = (java.util.Map<java.lang.String, uk.ac.ucl.twitter.search.geo.FileHandler>) o;
-    Assertions.assertEquals(2, m.size());
+    instance.deleteFile();
   }
 
 }

@@ -3,7 +3,7 @@ package uk.ac.ucl.twitter.search.geo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbBuilder;
 
 public class BearerTokenEntityTest {
 
