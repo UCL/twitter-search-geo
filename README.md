@@ -1,7 +1,6 @@
 # twitter-search-geo
 
-[![Build Status](https://travis-ci.org/UCL/twitter-search-geo.svg?branch=master)](https://travis-ci.org/UCL/twitter-search-geo)
-
+![Java CI with Maven](https://github.com/UCL/twitter-search-geo/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 ## Background
 
