@@ -3,6 +3,7 @@ package uk.ac.ucl.twitter.search.geo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 
 /**
@@ -32,6 +33,7 @@ public class ScheduleAppLocationEntity {
    * The name of the geographical location. To be used as identifier for
    * updates.
    */
+  @Id
   @Enumerated(EnumType.STRING)
   private Location location;
 
