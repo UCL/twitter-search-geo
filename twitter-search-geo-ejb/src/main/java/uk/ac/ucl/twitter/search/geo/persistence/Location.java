@@ -1,4 +1,4 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.persistence;
 
 /**
  * List of locations and their coordinates where tweets are collected from.

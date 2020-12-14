@@ -7,6 +7,10 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
+import uk.ac.ucl.twitter.search.geo.persistence.Location;
+import uk.ac.ucl.twitter.search.geo.persistence.LocationEntity;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

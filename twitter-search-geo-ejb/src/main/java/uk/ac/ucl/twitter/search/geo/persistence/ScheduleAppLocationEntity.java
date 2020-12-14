@@ -1,4 +1,4 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.persistence;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

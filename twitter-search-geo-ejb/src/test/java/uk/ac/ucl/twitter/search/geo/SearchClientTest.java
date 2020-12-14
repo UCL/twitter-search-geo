@@ -12,6 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
+import uk.ac.ucl.twitter.search.geo.persistence.Location;
+import uk.ac.ucl.twitter.search.geo.persistence.LocationEntity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.logging.Handler;

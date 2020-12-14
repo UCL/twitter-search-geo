@@ -2,6 +2,7 @@ package uk.ac.ucl.twitter.search.geo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import uk.ac.ucl.twitter.search.geo.persistence.Location;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
