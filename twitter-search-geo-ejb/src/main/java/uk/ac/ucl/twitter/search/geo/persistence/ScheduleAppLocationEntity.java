@@ -14,8 +14,8 @@ import jakarta.persistence.NamedQuery;
  */
 @Entity
 @NamedQuery(
-  name="ScheduleAppLocationEntity.findAll",
-  query="SELECT l FROM ScheduleAppLocationEntity l"
+  name = "ScheduleAppLocationEntity.findAll",
+  query = "SELECT l FROM ScheduleAppLocationEntity l"
 )
 public class ScheduleAppLocationEntity {
 
