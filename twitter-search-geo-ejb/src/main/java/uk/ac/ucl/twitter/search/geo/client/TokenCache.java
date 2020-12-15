@@ -1,4 +1,4 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.client;
 
 import jakarta.ejb.ConcurrencyManagement;
 import jakarta.ejb.ConcurrencyManagementType;

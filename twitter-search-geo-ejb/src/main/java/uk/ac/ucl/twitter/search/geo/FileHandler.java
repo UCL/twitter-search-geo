@@ -3,6 +3,9 @@ package uk.ac.ucl.twitter.search.geo;
 
 import jakarta.json.Json;
 import jakarta.json.stream.JsonParser;
+import uk.ac.ucl.twitter.search.geo.client.ClientConfiguration;
+import uk.ac.ucl.twitter.search.geo.client.StatusData;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;

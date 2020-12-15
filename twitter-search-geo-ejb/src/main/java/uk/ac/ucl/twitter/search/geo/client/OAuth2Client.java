@@ -1,4 +1,4 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.client;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
@@ -115,9 +115,9 @@ public class OAuth2Client {
           new MediaType("application", "x-www-form-urlencoded", "UTF-8")
         )
       );
-    BearerTokenEntity entity = JsonbBuilder.create().fromJson(
+    BearerToken entity = JsonbBuilder.create().fromJson(
       response.readEntity(String.class),
-      BearerTokenEntity.class
+      BearerToken.class
     );
     return entity.getAccessToken();
     // return response.readEntity(String.class);

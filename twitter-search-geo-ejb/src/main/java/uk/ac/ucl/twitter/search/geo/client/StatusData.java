@@ -1,4 +1,4 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.client;
 
 /**
  * Container for the status data returned from Twitter API.

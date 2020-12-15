@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import jakarta.ejb.Lock;
 import jakarta.ejb.LockType;
 import jakarta.ejb.Singleton;
+import uk.ac.ucl.twitter.search.geo.client.TokenCache;
+
 import java.lang.reflect.Method;
 
 public class TokenCacheTest {

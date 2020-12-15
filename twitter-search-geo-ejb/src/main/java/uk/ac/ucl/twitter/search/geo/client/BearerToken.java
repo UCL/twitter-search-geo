@@ -1,9 +1,9 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.client;
 
 
 import jakarta.json.bind.annotation.JsonbProperty;
 
-public class BearerTokenEntity {
+public class BearerToken {
 
   @JsonbProperty("token_type")
   private String tokenType;

@@ -1,4 +1,4 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.client;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
@@ -7,6 +7,8 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import uk.ac.ucl.twitter.search.geo.FileHandler;
+import uk.ac.ucl.twitter.search.geo.FileHandlerFactory;
 import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
 import uk.ac.ucl.twitter.search.geo.persistence.Location;
 import uk.ac.ucl.twitter.search.geo.persistence.LocationEntity;

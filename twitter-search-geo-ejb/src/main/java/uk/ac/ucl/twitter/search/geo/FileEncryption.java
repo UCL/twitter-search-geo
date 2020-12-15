@@ -1,5 +1,7 @@
 package uk.ac.ucl.twitter.search.geo;
 
+import uk.ac.ucl.twitter.search.geo.client.ClientConfiguration;
+
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKeyFactory;

@@ -12,6 +12,7 @@ import jakarta.ejb.Timer;
 import jakarta.ejb.TimerConfig;
 import jakarta.ejb.TimerService;
 import jakarta.inject.Inject;
+import uk.ac.ucl.twitter.search.geo.client.SearchClient;
 import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
 import uk.ac.ucl.twitter.search.geo.persistence.ScheduleAppLocationEntity;
 
