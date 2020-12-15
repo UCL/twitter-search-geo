@@ -1,4 +1,4 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.file;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;

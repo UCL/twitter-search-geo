@@ -1,8 +1,9 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.file;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.ac.ucl.twitter.search.geo.client.StatusData;
+import uk.ac.ucl.twitter.search.geo.file.FileHandler;
 import uk.ac.ucl.twitter.search.geo.persistence.Location;
 
 import java.io.IOException;
