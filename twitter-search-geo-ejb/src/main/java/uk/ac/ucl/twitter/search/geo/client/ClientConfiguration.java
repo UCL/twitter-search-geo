@@ -44,6 +44,11 @@ public interface ClientConfiguration {
     return (value != null) ? value : defaultValue;
   }
 
+  /**
+   * Obtains the value of a system property.
+   * @param key the key of the property
+   * @return the value of the property
+   */
   static byte[] getPropertyFromSystem(final String key) {
     return System.getProperty(key)
       .getBytes(StandardCharsets.UTF_8);
