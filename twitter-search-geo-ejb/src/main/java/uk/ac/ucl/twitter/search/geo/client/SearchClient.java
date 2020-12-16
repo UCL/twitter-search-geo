@@ -103,7 +103,7 @@ public class SearchClient {
         sinceDate + "_" + loc.name()
       );
       try {
-        StatusData.Metadata metadata = fileHandler.writeStatuses(
+        Metadata metadata = fileHandler.writeStatuses(
           response.readEntity(String.class)
         );
         locationEntity.setSinceId(metadata.getMaxId());
