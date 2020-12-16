@@ -6,6 +6,9 @@
   version="3.0"
 >
   <persistence-unit name="twitterSearchGeoPU" transaction-type="JTA">
-
+    <description>Persistence unit for tracking calls to Twitter Search API</description>
+    <jta-data-source>jdbc/TwitterSearchGeoPool</jta-data-source>
+    <class>uk.ac.ucl.twitter.search.geo.persistence.LocationEntity</class>
+    <class>uk.ac.ucl.twitter.search.geo.persistence.ScheduleAppLocationEntity</class>
   </persistence-unit>
 </persistence>
