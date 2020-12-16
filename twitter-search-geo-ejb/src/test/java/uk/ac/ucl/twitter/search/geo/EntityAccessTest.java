@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
+import uk.ac.ucl.twitter.search.geo.persistence.Location;
+import uk.ac.ucl.twitter.search.geo.persistence.LocationEntity;
 
 public class EntityAccessTest {
 

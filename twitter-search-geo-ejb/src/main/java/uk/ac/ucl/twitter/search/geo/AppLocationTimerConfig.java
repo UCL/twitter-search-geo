@@ -1,5 +1,7 @@
 package uk.ac.ucl.twitter.search.geo;
 
+import uk.ac.ucl.twitter.search.geo.persistence.Location;
+
 import java.io.Serializable;
 
 /**

@@ -1,7 +1,9 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.file;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import uk.ac.ucl.twitter.search.geo.client.Metadata;
+import uk.ac.ucl.twitter.search.geo.persistence.Location;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -26,7 +28,7 @@ public class FileHandlerTest {
   @Test
   public void testWriteStatuses() throws IOException {
     FileHandler instance = new FileHandler(fileName);
-    StatusData.Metadata metadata = instance.writeStatuses(jsonResponse);
+    Metadata metadata = instance.writeStatuses(jsonResponse);
     Assertions.assertEquals(2, metadata.getCount());
     Assertions.assertEquals(1125490788736032800L, metadata.getMaxId());
     instance.deleteFile();
@@ -35,10 +37,10 @@ public class FileHandlerTest {
   @Test
   public void testWriteStatusesAndAppend() throws IOException {
     FileHandler instance = new FileHandler(fileName);
-    StatusData.Metadata metadata = instance.writeStatuses(jsonResponse);
+    Metadata metadata = instance.writeStatuses(jsonResponse);
     Assertions.assertEquals(2, metadata.getCount());
     Assertions.assertEquals(1125490788736032800L, metadata.getMaxId());
-    StatusData.Metadata metadataAdd = instance.writeStatuses(jsonAddResponse);
+    Metadata metadataAdd = instance.writeStatuses(jsonAddResponse);
     Assertions.assertEquals(2, metadataAdd.getCount());
     Assertions.assertEquals(1125490788736032802L, metadataAdd.getMaxId());
     Path path = Paths.get(System.getProperty("java.io.tmpdir"), fileName);

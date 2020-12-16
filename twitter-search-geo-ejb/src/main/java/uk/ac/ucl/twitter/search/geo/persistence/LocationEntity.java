@@ -1,4 +1,4 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.persistence;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,8 +14,8 @@ import jakarta.persistence.NamedQuery;
  */
 @Entity
 @NamedQuery(
-  name="LocationEntity.findByLocation",
-  query="SELECT l FROM LocationEntity l WHERE l.location = :location"
+  name = "LocationEntity.findByLocation",
+  query = "SELECT l FROM LocationEntity l WHERE l.location = :location"
 )
 public class LocationEntity {
 
@@ -43,6 +43,9 @@ public class LocationEntity {
   public static final String QUERY_FIND_BY_LOCATION =
     "LocationEntity.findByLocation";
 
+  /**
+   * Name of the parameter in findByLocation typed query.
+   */
   public static final String PARAM_LOCATION = "location";
 
   /**

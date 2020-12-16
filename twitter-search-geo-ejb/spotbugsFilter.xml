@@ -3,7 +3,7 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/3.1.12/spotbugs/etc/findbugsfilter.xsd">
   <Match>
-    <Class name="uk.ac.ucl.twitter.search.geo.ScheduleAppLocationEntity" />
+    <Class name="uk.ac.ucl.twitter.search.geo.persistence.ScheduleAppLocationEntity" />
     <Method name="getAppName" />
     <Local name="appName" />
     <Bug pattern="UWF_UNWRITTEN_FIELD" />

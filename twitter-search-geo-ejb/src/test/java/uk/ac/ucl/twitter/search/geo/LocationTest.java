@@ -1,6 +1,7 @@
 package uk.ac.ucl.twitter.search.geo;
 
 import org.junit.jupiter.api.Test;
+import uk.ac.ucl.twitter.search.geo.persistence.Location;
 
 import java.lang.reflect.Method;
 import java.util.stream.Stream;

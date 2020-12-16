@@ -1,4 +1,4 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.file;
 
 import jakarta.ejb.ConcurrencyManagement;
 import jakarta.ejb.ConcurrencyManagementType;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Cache keeping a reference to JSON files collected. Configured as a
  * bean-managed singleton as explained in:
- * http://www.adam-bien.com/roller/abien/entry/singleton_the_perfect_cache_facade
+ * www.adam-bien.com/roller/abien/entry/singleton_the_perfect_cache_facade
  *
  * @author David Guzman {@literal d.guzman at ucl.ac.uk}
  * @since 1.0
@@ -72,6 +72,11 @@ public class FileReference {
       .collect(Collectors.toList());
   }
 
+  /**
+   * Returns a reference to a file specified by its date and geo location.
+   * @param dateAndLocation
+   * @return a FileHandler reference to the file
+   */
   public FileHandler get(final String dateAndLocation) {
     return fileHandlerMap.get(dateAndLocation);
   }

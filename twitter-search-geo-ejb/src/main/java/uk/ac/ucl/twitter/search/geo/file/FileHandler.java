@@ -1,8 +1,12 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.file;
 
 
 import jakarta.json.Json;
 import jakarta.json.stream.JsonParser;
+import uk.ac.ucl.twitter.search.geo.client.ClientConfiguration;
+import uk.ac.ucl.twitter.search.geo.client.Metadata;
+import uk.ac.ucl.twitter.search.geo.client.StatusData;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
@@ -93,7 +97,7 @@ public final class FileHandler {
    * @return Metadata to use for pagination in subsequent queries and monitoring
    * @throws IOException If JSON file cannot be written
    */
-  public StatusData.Metadata writeStatuses(final String jsonResponse)
+  public Metadata writeStatuses(final String jsonResponse)
     throws IOException {
     if (openOption.equals(StandardOpenOption.READ)) {
       throw new IOException("File has been closed and set as read-only.");
@@ -139,8 +143,12 @@ public final class FileHandler {
    * @throws IOException If an I/O error occurs
    */
   public String deleteFile() throws IOException {
-    Files.deleteIfExists(path);
-    return path.getFileName().toString();
+    boolean isDeleted = Files.deleteIfExists(path);
+    Path fileName = path.getFileName();
+    if (null != fileName && isDeleted) {
+      return fileName.toString();
+    }
+    return "";
   }
 
   private StatusData extractStatus(final String jsonResponse) {

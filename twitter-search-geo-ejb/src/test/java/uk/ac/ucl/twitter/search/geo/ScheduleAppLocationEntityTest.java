@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
+import uk.ac.ucl.twitter.search.geo.persistence.ScheduleAppLocationEntity;
 
 import java.lang.reflect.Field;
 
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Unit tests for {@see uk.ac.ucl.twitter.search.geo.ScheduleAppLocationEntity}
+ * Unit tests for {@see uk.ac.ucl.twitter.search.geo.persistence.ScheduleAppLocationEntity}
  * based on the recommendations listed in
  * <a href="http://mjremijan.blogspot.com/2016/06/unit-testing-jpa-annotationsstop_20.html">
  * http://mjremijan.blogspot.com/2016/06/unit-testing-jpa-annotationsstop_20.html

@@ -1,4 +1,6 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.file;
+
+import uk.ac.ucl.twitter.search.geo.client.ClientConfiguration;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -26,24 +28,54 @@ import java.util.Arrays;
  */
 public class FileEncryption {
 
+  /**
+   * Name of the system property to call the encryption credential.
+   */
   public static final String CREDENTIAL_NAME = "LZO_ENCRYPTION_CREDENTIAL";
 
+  /**
+   * Key used for AES encryption.
+   */
   private static final byte[] ENCRYPTION_KEY = ClientConfiguration
     .getPropertyFromSystem(CREDENTIAL_NAME);
 
+  /**
+   * Transformation definition for configuration of the cipher.
+   */
   private static final String TRANSFORMATION = "AES/CBC/PKCS5Padding";
 
+  /**
+   * Cryptographic cipher for encryption.
+   */
   private final Cipher cipher;
 
-  private static final SecureRandom secureRandom = new SecureRandom();
+  /**
+   * Random number generator for cryptography.
+   */
+  private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
+  /**
+   * Factory for password-based secret keys with hash length of 160 bits.
+   */
   private final SecretKeyFactory factory = SecretKeyFactory
     .getInstance("PBKDF2WithHmacSHA1");
 
+  /**
+   * Number of bytes to use in cryptographic salt.
+   */
+  private static final int SALT_BYTES = 16;
+
+  /**
+   * Constructs and configures a new instance of the encryptor.
+   * @throws NoSuchPaddingException
+   * @throws NoSuchAlgorithmException
+   * @throws InvalidKeySpecException
+   * @throws InvalidKeyException
+   */
   public FileEncryption() throws NoSuchPaddingException,
     NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
-    byte[] salt = new byte[16];
-    secureRandom.nextBytes(salt);
+    byte[] salt = new byte[SALT_BYTES];
+    SECURE_RANDOM.nextBytes(salt);
     final KeySpec keySpec = new PBEKeySpec(
       bytesToChars(ENCRYPTION_KEY), salt, 65536, 128
     );
@@ -55,11 +87,15 @@ public class FileEncryption {
     );
   }
 
+  /**
+   * Encrypts a file specified by a path.
+   * @param path path of the file to be encrypted
+   */
   public void encrypt(final Path path) {
     //Files.write()
   }
 
-  private char[] bytesToChars(byte[] bytes) {
+  private char[] bytesToChars(final byte[] bytes) {
     Charset charset = StandardCharsets.UTF_8;
     CharBuffer charBuffer = charset.decode(ByteBuffer.wrap(bytes));
     return Arrays.copyOf(charBuffer.array(), charBuffer.limit());

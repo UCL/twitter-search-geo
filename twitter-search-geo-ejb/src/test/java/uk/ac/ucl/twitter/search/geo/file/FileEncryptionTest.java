@@ -1,9 +1,10 @@
-package uk.ac.ucl.twitter.search.geo;
+package uk.ac.ucl.twitter.search.geo.file;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import uk.ac.ucl.twitter.search.geo.file.FileEncryption;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
