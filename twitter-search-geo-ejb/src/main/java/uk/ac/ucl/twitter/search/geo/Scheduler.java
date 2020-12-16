@@ -16,7 +16,7 @@ import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
 import uk.ac.ucl.twitter.search.geo.persistence.ScheduleAppLocationEntity;
 
 @Singleton
-public final class Scheduler {
+public class Scheduler {
 
   /**
    * EJB container-managed service used to invoke #callPublisher at a
