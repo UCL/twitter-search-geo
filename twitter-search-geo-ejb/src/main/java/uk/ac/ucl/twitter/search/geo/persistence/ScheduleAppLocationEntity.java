@@ -1,10 +1,12 @@
 package uk.ac.ucl.twitter.search.geo.persistence;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 /**
  * Entity class containing schedule information for API calls based on location.
@@ -17,16 +19,19 @@ import jakarta.persistence.NamedQuery;
   name = "ScheduleAppLocationEntity.findAll",
   query = "SELECT l FROM ScheduleAppLocationEntity l"
 )
+@Table(name = "SCHEDULE_APP_LOCATION")
 public class ScheduleAppLocationEntity {
 
   /**
    * The name of the application, used as authentication context.
    */
+  @Column(name = "APP_NAME")
   private String appName;
 
   /**
    * The schedule for an API call in CRON format.
    */
+  @Column(name = "INTERVAL_MINUTES")
   private int intervalMinutes;
 
   /**
@@ -35,6 +40,7 @@ public class ScheduleAppLocationEntity {
    */
   @Id
   @Enumerated(EnumType.STRING)
+  @Column(name = "GEOLOCATION")
   private Location location;
 
   /**

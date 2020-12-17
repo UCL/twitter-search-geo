@@ -1,10 +1,12 @@
 package uk.ac.ucl.twitter.search.geo.persistence;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 /**
  * Entity class that keeps a record of the counts and last ID collected per
@@ -17,6 +19,7 @@ import jakarta.persistence.NamedQuery;
   name = "LocationEntity.findByLocation",
   query = "SELECT l FROM LocationEntity l WHERE l.location = :location"
 )
+@Table(name = "LOCATION_TRACKING")
 public class LocationEntity {
 
   /**
@@ -25,16 +28,19 @@ public class LocationEntity {
    */
   @Id
   @Enumerated(EnumType.STRING)
+  @Column(name = "GEOLOCATION")
   private Location location;
 
   /**
    * Count of tweets collected.
    */
+  @Column(name = "TWEET_COUNT")
   private int count;
 
   /**
    * The last ID used as a reference for the collection of tweets.
    */
+  @Column(name = "SINCE_ID")
   private long sinceId;
 
   /**
