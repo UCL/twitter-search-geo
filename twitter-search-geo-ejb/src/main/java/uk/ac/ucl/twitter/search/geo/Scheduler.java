@@ -6,6 +6,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Schedule;
 import jakarta.ejb.ScheduleExpression;
 import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 import jakarta.ejb.Timeout;
 import jakarta.ejb.Timer;
 import jakarta.ejb.TimerConfig;
@@ -16,6 +17,7 @@ import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
 import uk.ac.ucl.twitter.search.geo.persistence.ScheduleAppLocationEntity;
 
 @Singleton
+@Startup
 public class Scheduler {
 
   /**
@@ -45,7 +47,11 @@ public class Scheduler {
     for (ScheduleAppLocationEntity scheduleAppLocationEntity : entityAccess
       .findAllScheduleAppLocationEntity()) {
       ScheduleExpression scheduleExpression = new ScheduleExpression();
-      scheduleExpression.minute(scheduleAppLocationEntity.getIntervalMinutes());
+      String minute = String.format(
+        "*/%d", scheduleAppLocationEntity.getIntervalMinutes()
+      );
+      scheduleExpression.minute(minute);
+      scheduleExpression.hour("*");
       TimerConfig timerConfig = new TimerConfig();
       timerConfig.setInfo(
         new AppLocationTimerConfig(
