@@ -35,13 +35,13 @@ public class LocationEntity {
    * Count of tweets collected.
    */
   @Column(name = "TWEET_COUNT")
-  private int count;
+  private int count = 0;
 
   /**
    * The last ID used as a reference for the collection of tweets.
    */
   @Column(name = "SINCE_ID")
-  private long sinceId;
+  private long sinceId = 0;
 
   /**
    * Named query to find LocationEntity by Location name.

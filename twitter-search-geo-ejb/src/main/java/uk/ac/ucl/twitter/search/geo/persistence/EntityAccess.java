@@ -30,7 +30,11 @@ public class EntityAccess {
         LocationEntity.class
       );
     typedQuery.setParameter(LocationEntity.PARAM_LOCATION, location);
-    return typedQuery.getSingleResult();
+    List<LocationEntity> resultList = typedQuery.getResultList();
+    if (resultList.isEmpty()) {
+      return new LocationEntity();
+    }
+    return resultList.get(0);
   }
 
   /**
