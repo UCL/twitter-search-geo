@@ -13,8 +13,12 @@ import jakarta.ejb.TimerConfig;
 import jakarta.ejb.TimerService;
 import jakarta.inject.Inject;
 import uk.ac.ucl.twitter.search.geo.client.SearchClient;
+import uk.ac.ucl.twitter.search.geo.file.FileHandlerLocator;
 import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
 import uk.ac.ucl.twitter.search.geo.persistence.ScheduleAppLocationEntity;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Singleton
 @Startup
@@ -38,6 +42,12 @@ public class Scheduler {
    */
   @Inject
   private SearchClient searchClient;
+
+  /**
+   * Locates files being written.
+   */
+  @Inject
+  private FileHandlerLocator fileHandlerLocator;
 
   /**
    * EJB life cycle method used for configuring the timer service.
@@ -78,17 +88,19 @@ public class Scheduler {
   /**
    * Closes writing of files and transfers them onto network storage.
    */
-  @Schedule(minute = "13", hour = "2")
+  @Schedule(second = "5", minute = "13", hour = "2")
   public void closeAndTransferFiles() {
-    throw new UnsupportedOperationException("Not implemented yet.");
+    String dateStr = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+    fileHandlerLocator.close(dateStr);
   }
 
   /**
    * Compresses files using LZO algorithm.
    */
-  @Schedule(minute = "13", hour = "3")
+  @Schedule(second = "5", minute = "13", hour = "3")
   public void lzoFiles() {
-    throw new UnsupportedOperationException("Not implemented yet.");
+    String dateStr = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+    fileHandlerLocator.compress(dateStr);
   }
 
   /*
