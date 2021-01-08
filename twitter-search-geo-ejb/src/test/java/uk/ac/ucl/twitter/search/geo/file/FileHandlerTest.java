@@ -54,10 +54,6 @@ public class FileHandlerTest {
 
   @Test
   public void testCloseFile() throws IllegalAccessException, IOException {
-    FileHandler instance = new FileHandler(fileName);
-    instance.writeStatuses(jsonResponse);
-    instance.writeStatuses(jsonAddResponse);
-    instance.closeFile();
     Field[] fields = FileHandler.class.getDeclaredFields();
     String className = StandardOpenOption.class.getName();
     Field internal = Arrays
@@ -66,8 +62,15 @@ public class FileHandlerTest {
       .findFirst()
       .get();
     internal.setAccessible(true);
-    StandardOpenOption openOption = (StandardOpenOption) internal.get(instance);
-    Assertions.assertEquals(StandardOpenOption.READ, openOption);
+
+    FileHandler instance = new FileHandler(fileName);
+    Assertions.assertEquals(StandardOpenOption.CREATE, internal.get(instance));
+    instance.writeStatuses(jsonResponse);
+    Assertions.assertEquals(StandardOpenOption.APPEND, internal.get(instance));
+    instance.writeStatuses(jsonAddResponse);
+    Assertions.assertEquals(StandardOpenOption.APPEND, internal.get(instance));
+    instance.closeFile();
+    Assertions.assertEquals(StandardOpenOption.READ, internal.get(instance));
     byte[] fileBytes = Files.readAllBytes(Paths.get(System.getProperty("java.io.tmpdir"), fileName));
     String closedFileContents = new String(fileBytes);
     Assertions.assertTrue(closedFileContents.startsWith("["));

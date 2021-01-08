@@ -1,6 +1,5 @@
 package uk.ac.ucl.twitter.search.geo.file;
 
-
 import jakarta.json.Json;
 import jakarta.json.stream.JsonParser;
 import uk.ac.ucl.twitter.search.geo.client.ClientConfiguration;
@@ -14,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 
 /**
  * Provides access to JSON files where the data is persisted. Supports creation,
@@ -86,6 +84,11 @@ public final class FileHandler {
   private static final byte[] RIGHT_SQUARE_BRACKET = "]"
     .getBytes(StandardCharsets.UTF_8);
 
+  /**
+   * Comma character.
+   */
+  private static final byte[] COMMA = ",".getBytes(StandardCharsets.UTF_8);
+
   FileHandler(final String jsonFile) {
     path = Paths.get(SEARCH_GEO_DIR, jsonFile);
   }
@@ -103,12 +106,17 @@ public final class FileHandler {
       throw new IOException("File has been closed and set as read-only.");
     }
     final StatusData statusData = extractStatus(jsonResponse);
+    if (openOption.equals(StandardOpenOption.APPEND)) {
+      Files.write(path, COMMA, openOption);
+    } else if (openOption.equals(StandardOpenOption.CREATE)) {
+      Files.write(path, LEFT_SQUARE_BRACKET, openOption);
+    }
+    openOption = StandardOpenOption.APPEND;
     Files.write(
       path,
       statusData.getStatuses().getBytes(StandardCharsets.UTF_8),
       openOption
     );
-    openOption = StandardOpenOption.APPEND;
     return statusData.getMetaData();
   }
 
@@ -117,22 +125,12 @@ public final class FileHandler {
    * @throws IOException if the file cannot be read of written
    */
   public void closeFile() throws IOException {
-    byte[] jsonByteContent = Files.readAllBytes(path);
-    final int combinedLength = LEFT_SQUARE_BRACKET.length
-      + jsonByteContent.length + LEFT_SQUARE_BRACKET.length;
-    byte[] combinedByteContent = Arrays.copyOf(
-      LEFT_SQUARE_BRACKET, combinedLength
-    );
-    int offset = LEFT_SQUARE_BRACKET.length;
-    System.arraycopy(
-      jsonByteContent, 0, combinedByteContent, offset, jsonByteContent.length
-    );
-    offset += jsonByteContent.length;
-    System.arraycopy(
-      RIGHT_SQUARE_BRACKET, 0, combinedByteContent, offset,
-      RIGHT_SQUARE_BRACKET.length
-    );
-    Files.write(path, combinedByteContent, StandardOpenOption.WRITE);
+    if (!openOption.equals(StandardOpenOption.APPEND)) {
+      throw new IOException(
+        "Standard open option does not allow appending to file."
+      );
+    }
+    Files.write(path, RIGHT_SQUARE_BRACKET, openOption);
     openOption = StandardOpenOption.READ;
   }
 
@@ -161,9 +159,7 @@ public final class FileHandler {
       boolean isKeyName = event.equals(JsonParser.Event.KEY_NAME);
       if (isKeyName && jsonParser.getString().equals("statuses")) {
         jsonParser.next();
-        final String comma = openOption
-          .equals(StandardOpenOption.APPEND) ? "," : "";
-        final String status = comma + jsonParser
+        final String status = jsonParser
           .getArray()
           .toString()
           .trim()
