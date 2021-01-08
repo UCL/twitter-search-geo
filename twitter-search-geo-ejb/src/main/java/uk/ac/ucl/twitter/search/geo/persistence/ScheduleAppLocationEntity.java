@@ -35,6 +35,12 @@ public class ScheduleAppLocationEntity {
   private int intervalMinutes;
 
   /**
+   * The delay in seconds to add to the schedule.
+   */
+  @Column(name = "DELAY_SECONDS")
+  private int delaySeconds;
+
+  /**
    * The name of the geographical location. To be used as identifier for
    * updates.
    */
@@ -76,6 +82,14 @@ public class ScheduleAppLocationEntity {
    */
   public Location getLocation() {
     return location;
+  }
+
+  /**
+   * Getter for the delaySeconds field.
+   * @return The delay in seconds to add to the schedule
+   */
+  public int getDelaySeconds() {
+    return delaySeconds;
   }
 
 }

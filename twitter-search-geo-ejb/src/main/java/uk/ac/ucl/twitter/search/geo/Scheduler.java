@@ -61,6 +61,7 @@ public class Scheduler {
         "*/%d", scheduleAppLocationEntity.getIntervalMinutes()
       );
       scheduleExpression.minute(minute);
+      scheduleExpression.second(scheduleAppLocationEntity.getDelaySeconds());
       scheduleExpression.hour("*");
       TimerConfig timerConfig = new TimerConfig();
       timerConfig.setInfo(
