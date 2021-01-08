@@ -8,7 +8,7 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import uk.ac.ucl.twitter.search.geo.file.FileHandler;
-import uk.ac.ucl.twitter.search.geo.file.FileHandlerFactory;
+import uk.ac.ucl.twitter.search.geo.file.FileHandlerLocator;
 import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
 import uk.ac.ucl.twitter.search.geo.persistence.Location;
 import uk.ac.ucl.twitter.search.geo.persistence.LocationEntity;
@@ -59,10 +59,21 @@ public class SearchClient {
     .path(SEARCH_RESOURCE_PATH);
 
   /**
+   * Activates extended mode, required to retrieve the full text of a tweet.
+   */
+  private static final String TWEET_MDDE = "extended";
+
+  /**
    * Provides the OAuth2 bearer token.
    */
   @Inject
   private OAuth2Client oAuth2Client;
+
+  /**
+   * Creates references to json files.
+   */
+  @Inject
+  private FileHandlerLocator fileHandlerLocator;
 
   /**
    * Provides access to query and update entities in database.
@@ -83,6 +94,7 @@ public class SearchClient {
       .findLocationEntityByLocation(loc);
     final String sinceDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
     final Response response = webTarget
+      .queryParam("tweet_mode", TWEET_MDDE)
       .queryParam(
         "query",
         "since:" + sinceDate
@@ -98,8 +110,7 @@ public class SearchClient {
         "Bearer " + oAuth2Client.getBearerToken(applicationName)
       ).get();
     if (Response.Status.OK.getStatusCode() == response.getStatus()) {
-      FileHandlerFactory fileHandlerFactory = FileHandlerFactory.newInstance();
-      FileHandler fileHandler = fileHandlerFactory.createFileHandler(
+      FileHandler fileHandler = fileHandlerLocator.obtain(
         sinceDate + "_" + loc.name()
       );
       try {
@@ -108,6 +119,7 @@ public class SearchClient {
         );
         locationEntity.setSinceId(metadata.getMaxId());
         locationEntity.setCount(metadata.getCount());
+        locationEntity.setLocation(loc);
         entityAccess.updateLocationEntity(locationEntity);
       } catch (IOException e) {
         getLogger(SearchClient.class.getName())

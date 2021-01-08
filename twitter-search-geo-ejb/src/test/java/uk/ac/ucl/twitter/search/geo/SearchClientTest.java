@@ -3,7 +3,6 @@ package uk.ac.ucl.twitter.search.geo;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import mockit.Expectations;
 import mockit.Injectable;
-import mockit.Mocked;
 import mockit.Tested;
 import mockit.Verifications;
 import org.junit.jupiter.api.AfterEach;
@@ -14,7 +13,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import uk.ac.ucl.twitter.search.geo.client.OAuth2Client;
 import uk.ac.ucl.twitter.search.geo.client.SearchClient;
-import uk.ac.ucl.twitter.search.geo.file.FileHandlerFactory;
+import uk.ac.ucl.twitter.search.geo.file.FileHandlerLocator;
 import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
 import uk.ac.ucl.twitter.search.geo.persistence.Location;
 import uk.ac.ucl.twitter.search.geo.persistence.LocationEntity;
@@ -57,7 +56,7 @@ public class SearchClientTest {
       @Tested SearchClient instance,
       @Injectable OAuth2Client oAuth2Client,
       @Injectable EntityAccess entityAccess,
-      @Mocked FileHandlerFactory fileHandlerFactory
+      @Injectable FileHandlerLocator fileHandlerLocator
     ) {
       WireMockServer wireMockServer = new WireMockServer(wireMockPort);
       wireMockServer.start();
@@ -101,7 +100,6 @@ public class SearchClientTest {
         entityAccess.updateLocationEntity(locationEntityStub);
         times = 1;
       }};
-
       wireMockServer.stop();
     }
 
