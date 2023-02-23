@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>twitter-search-geo</artifactId>
     <groupId>uk.ac.ucl.twitter</groupId>
@@ -16,19 +16,19 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <maven.checkstyle.plugin.version>3.1.1</maven.checkstyle.plugin.version>
-    <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
-    <maven.spotbugs.plugin.version>4.1.4</maven.spotbugs.plugin.version>
-    <jakarta.jakartaee-api.version>9.0.0</jakarta.jakartaee-api.version>
-    <jakarta.json.version>2.0.0</jakarta.json.version>
-    <jersey.version>3.0.0</jersey.version>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven.checkstyle.plugin.version>3.2.1</maven.checkstyle.plugin.version>
+    <maven.surefire.plugin.version>3.0.0-M9</maven.surefire.plugin.version>
+    <maven.spotbugs.plugin.version>4.7.3.0</maven.spotbugs.plugin.version>
+    <jakarta.jakartaee-api.version>10.0.0</jakarta.jakartaee-api.version>
+    <jakarta.json.version>2.0.1</jakarta.json.version>
+    <jersey.version>3.1.1</jersey.version>
     <jmockit.version>1.49</jmockit.version>
-    <junit.jupiter.version>5.7.0</junit.jupiter.version>
-    <slf4j.version>1.7.28</slf4j.version>
-    <wiremock.version>2.27.2</wiremock.version>
-    <yassoon.version>2.0.1</yassoon.version>
+    <junit.jupiter.version>5.9.2</junit.jupiter.version>
+    <slf4j.version>2.0.6</slf4j.version>
+    <wiremock.version>2.35.0</wiremock.version>
+    <yassoon.version>3.0.2</yassoon.version>
   </properties>
 
   <dependencies>
@@ -46,6 +46,28 @@
       <version>${junit.jupiter.version}</version>
       <scope>test</scope>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.1.1</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.1.1</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.24.2</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.jmockit/jmockit -->
     <dependency>
       <groupId>org.jmockit</groupId>
@@ -126,7 +148,8 @@
         <version>${maven.surefire.plugin.version}</version>
         <configuration>
           <argLine>
-            -javaagent:${settings.localRepository}/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar -Duser.region=GB
+            -javaagent:${settings.localRepository}/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar
+            -Duser.region=GB
           </argLine>
         </configuration>
       </plugin>

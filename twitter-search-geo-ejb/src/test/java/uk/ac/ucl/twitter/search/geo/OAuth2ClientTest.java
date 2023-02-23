@@ -1,50 +1,57 @@
 package uk.ac.ucl.twitter.search.geo;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Tested;
-import mockit.Verifications;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+
 import uk.ac.ucl.twitter.search.geo.client.OAuth2Client;
 import uk.ac.ucl.twitter.search.geo.client.TokenCache;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
-
 @DisplayName("Obtains OAuth2 bearer token from cache or API")
+@ExtendWith(MockitoExtension.class)
 public class OAuth2ClientTest {
 
   @Nested
   @DisplayName("Obtains OAuth2 bearer token from cache")
   class OAuth2ClientFromCacheTest {
 
-    @Test
-    public void testGetBearerTokenFromCache(
-      @Tested OAuth2Client instance,
-      @Injectable TokenCache tokenCache
-    ) {
-      new Expectations() {{
-        tokenCache.existsInCache("applicationName");
-        result = true;
+    @Mock
+    private TokenCache tokenCache;
 
-        tokenCache.getBearer("applicationName");
-        result = "atoken";
-      }};
+    @InjectMocks
+    private OAuth2Client instance;
+
+    @Test
+    public void testGetBearerTokenFromCache() {
+      when(tokenCache.existsInCache(anyString()))
+          .thenReturn(true);
+
+      when(tokenCache.getBearer(anyString()))
+          .thenReturn("aToken");
+
       String result = instance.getBearerToken("applicationName");
-      Assertions.assertEquals("atoken", result);
+
+      Assertions.assertThat(result).isEqualTo("aToken");
     }
 
   }
 
+  private static final int WIREMOCK_PORT = 8090;
   /*
   Must implement steps defined in
   https://developer.twitter.com/en/docs/basics/authentication/overview/application-only
@@ -56,13 +63,18 @@ public class OAuth2ClientTest {
    */
   @Nested
   @DisplayName("Obtains OAuth2 bearer token from API")
+  @WireMockTest(httpPort = WIREMOCK_PORT)
   class OAuth2ClientFromApiTest {
 
-    private final int wireMockPort = 8090;
+    @InjectMocks
+    private OAuth2Client instance;
+
+    @Mock
+    private TokenCache tokenCache;
 
     @BeforeEach
     public void setup() {
-      System.setProperty("OAUTH2_HOST", "http://localhost:" + wireMockPort);
+      System.setProperty("OAUTH2_HOST", "http://localhost:" + WIREMOCK_PORT);
       System.setProperty("applicationName-KEY", "xvz1evFS4wEEPTGEFPHBog");
       System.setProperty("applicationName-SECRET", "L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg");
     }
@@ -75,17 +87,11 @@ public class OAuth2ClientTest {
     }
 
     @Test
-    public void testGetBearerTokenFromApi(
-      @Tested OAuth2Client instance,
-      @Injectable TokenCache tokenCache
-    ) {
-      WireMockServer wireMockServer = new WireMockServer(wireMockPort);
-      wireMockServer.start();
-      // setup stub
-      wireMockServer.stubFor(
-        post(urlPathEqualTo("/oauth2/token"))
+    public void testGetBearerTokenFromApi() {
+      WireMock.stubFor(
+        WireMock.post(WireMock.urlPathEqualTo("/oauth2/token"))
           .willReturn(
-            aResponse().withHeader("Content-Type", "application/json")
+            WireMock.aResponse().withHeader("Content-Type", "application/json")
               .withStatus(200)
               .withBody(
                 "{\"token_type\":\"bearer\",\"access_token\":\"AAAA%2FAAA%3DAAAAAAAA\"}"
@@ -94,23 +100,30 @@ public class OAuth2ClientTest {
       );
 
       instance.updateBearerToken("applicationName");
-      wireMockServer.verify(
-        postRequestedFor(urlPathEqualTo("/oauth2/token"))
+      // /*
+      WireMock.verify(
+        WireMock.postRequestedFor(WireMock.urlPathEqualTo("/oauth2/token"))
           .withHeader(
             "Authorization",
-            equalTo("Basic eHZ6MWV2RlM0d0VFUFRHRUZQSEJvZzpMOHFxOVBaeVJnNmllS0dFS2hab2xHQzB2SldMdzhpRUo4OERSZHlPZw==")
+            WireMock.equalTo("Basic eHZ6MWV2RlM0d0VFUFRHRUZQSEJvZzpMOHFxOVBaeVJnNmllS0dFS2hab2xHQzB2SldMdzhpRUo4OERSZHlPZw==")
           )
           .withHeader(
             "Content-Type",
-            equalTo("application/x-www-form-urlencoded;charset=UTF-8")
+            WireMock.equalTo("application/x-www-form-urlencoded;charset=UTF-8")
           )
-          .withRequestBody(equalTo("grant_type=client_credentials"))
+          .withRequestBody(WireMock.equalTo("grant_type=client_credentials"))
       );
-      wireMockServer.stop();
+      // */
 
-      new Verifications() {{
-        tokenCache.setBearer("applicationName", "AAAA%2FAAA%3DAAAAAAAA");
-      }};
+
+      ArgumentCaptor<String> param0 = ArgumentCaptor.forClass(String.class);
+      ArgumentCaptor<String> param1 = ArgumentCaptor.forClass(String.class);
+
+      verify(tokenCache).setBearer(param0.capture(), param1.capture());
+
+      Assertions.assertThat(param0.getValue()).isEqualTo("applicationName");
+      Assertions.assertThat(param1.getValue()).isEqualTo("AAAA%2FAAA%3DAAAAAAAA");
+
     }
 
   }

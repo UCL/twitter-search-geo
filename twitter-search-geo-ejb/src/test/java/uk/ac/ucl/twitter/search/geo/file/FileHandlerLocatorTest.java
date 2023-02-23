@@ -1,11 +1,9 @@
 package uk.ac.ucl.twitter.search.geo.file;
 
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Mocked;
-import mockit.Tested;
-import mockit.Verifications;
-import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -13,12 +11,26 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class FileHandlerLocatorTest {
 
-  final @Tested FileHandlerLocator instance = new FileHandlerLocator();
+  @Mock
+  private FileReference fileReference;
+
+  @Mock
+  private FileHandler fileHandler;
+
+  @InjectMocks
+  private FileHandlerLocator instance;
 
   @Test
-  public void testClose(@Injectable FileReference fileReference, @Mocked FileHandler fileHandler) throws IOException {
+  public void testClose() throws IOException {
     List<Path> allPaths = new ArrayList<>();
     allPaths.add(
       Paths.get(System.getProperty("java.io.tmpdir"), "2021-01-06_Location1")
@@ -26,15 +38,17 @@ public class FileHandlerLocatorTest {
     allPaths.add(
       Paths.get(System.getProperty("java.io.tmpdir"), "2021-01-06_Location2")
     );
-    new Expectations() {{
-      fileReference.getAllPaths();
-      result = allPaths;
-    }};
+
+    when(fileReference.getAllPaths()).thenReturn(allPaths);
+
+    when(fileHandler.getPath()).thenReturn(allPaths.get(0), allPaths.get(1));
+
+    when(fileReference.get(anyString())).thenReturn(fileHandler);
+
     instance.close("2021-01-07");
-    new Verifications() {{
-      fileHandler.closeFile();
-      times = 2;
-    }};
+
+    verify(fileHandler, times(2)).closeFile();
+
   }
 
 }
