@@ -89,7 +89,7 @@ public final class FileHandler {
    */
   private static final byte[] COMMA = ",".getBytes(StandardCharsets.UTF_8);
 
-  FileHandler(final String jsonFile) {
+  public FileHandler(final String jsonFile) {
     path = Paths.get(SEARCH_GEO_DIR, jsonFile);
   }
 

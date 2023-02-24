@@ -1,18 +1,22 @@
 package uk.ac.ucl.twitter.search.geo;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Tested;
-import mockit.Verifications;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import uk.ac.ucl.twitter.search.geo.client.OAuth2Client;
 import uk.ac.ucl.twitter.search.geo.client.SearchClient;
+import uk.ac.ucl.twitter.search.geo.file.FileHandler;
 import uk.ac.ucl.twitter.search.geo.file.FileHandlerLocator;
 import uk.ac.ucl.twitter.search.geo.persistence.EntityAccess;
 import uk.ac.ucl.twitter.search.geo.persistence.Location;
@@ -29,8 +33,12 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 @DisplayName("Calls the search API")
+@ExtendWith(MockitoExtension.class)
 public class SearchClientTest {
 
   private static Logger log = Logger.getLogger(SearchClient.class.getName());
@@ -39,25 +47,32 @@ public class SearchClientTest {
   @DisplayName("The API returns 200/OK")
   class SearchClient200Test {
 
-    private final int wireMockPort = 8092;
+    private static final int wireMockPort = 8092;
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    public static void setup() {
       System.setProperty("SEARCH_HOST", "http://localhost:" + wireMockPort);
     }
 
-    @AfterEach
-    public void tearDown() {
+    @AfterAll
+    public static void tearDown() {
       System.clearProperty("SEARCH_HOST");
     }
 
+    @Mock
+    private OAuth2Client oAuth2Client;
+
+    @Mock
+    private EntityAccess entityAccess;
+
+    @Mock
+    private FileHandlerLocator fileHandlerLocator;
+
+    @InjectMocks
+    private SearchClient instance;
+
     @Test
-    public void testRunSearchWhenOk(
-      @Tested SearchClient instance,
-      @Injectable OAuth2Client oAuth2Client,
-      @Injectable EntityAccess entityAccess,
-      @Injectable FileHandlerLocator fileHandlerLocator
-    ) {
+    public void testRunSearchWhenOk() {
       WireMockServer wireMockServer = new WireMockServer(wireMockPort);
       wireMockServer.start();
       // setup stub
@@ -75,13 +90,16 @@ public class SearchClientTest {
       locationEntityStub.setCount(10);
       locationEntityStub.setLocation(Location.Aberdeen);
       locationEntityStub.setSinceId(0L);
-      new Expectations() {{
-        entityAccess.findLocationEntityByLocation(Location.Aberdeen);
-        result = locationEntityStub;
 
-        oAuth2Client.getBearerToken("applicationName");
-        result = "aToken";
-      }};
+      when(entityAccess.findLocationEntityByLocation(Location.Aberdeen))
+          .thenReturn(locationEntityStub);
+
+      when(oAuth2Client.getBearerToken(anyString()))
+          .thenReturn("aToken");
+
+      when(fileHandlerLocator.obtain(anyString()))
+          .thenReturn(new FileHandler("2020-02-24_Aberdeen"));
+
       instance.runSearch(Location.Aberdeen, "applicationName");
 
       wireMockServer.verify(
@@ -96,10 +114,8 @@ public class SearchClientTest {
           .withQueryParam("since_id", equalTo("0"))
       );
 
-      new Verifications() {{
-        entityAccess.updateLocationEntity(locationEntityStub);
-        times = 1;
-      }};
+      Mockito.verify(entityAccess, times(1)).updateLocationEntity(locationEntityStub);
+
       wireMockServer.stop();
     }
 
@@ -109,24 +125,29 @@ public class SearchClientTest {
   @DisplayName("The API does not return 200/OK")
   class SearchClientNot200Test {
 
-    private final int wireMockPort = 8092;
+    private static final int wireMockPort = 8092;
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    public static void setup() {
       System.setProperty("SEARCH_HOST", "http://localhost:" + wireMockPort);
     }
 
-    @AfterEach
-    public void tearDown() {
+    @AfterAll
+    public static void tearDown() {
       System.clearProperty("SEARCH_HOST");
     }
 
+    @Mock
+    private OAuth2Client oAuth2Client;
+
+    @Mock
+    private EntityAccess entityAccess;
+
+    @InjectMocks
+    private SearchClient instance;
+
     @Test
-    public void testRunSearchWhenNotOk(
-      @Tested SearchClient instance,
-      @Injectable OAuth2Client oAuth2Client,
-      @Injectable EntityAccess entityAccess
-    ) {
+    public void testRunSearchWhenNotOk() {
       WireMockServer wireMockServer = new WireMockServer(wireMockPort);
       wireMockServer.start();
 
@@ -150,13 +171,9 @@ public class SearchClientTest {
       locationEntityStub.setLocation(Location.Aberdeen);
       locationEntityStub.setSinceId(0L);
 
-      new Expectations() {{
-        entityAccess.findLocationEntityByLocation(Location.Aberdeen);
-        result = locationEntityStub;
+      when(entityAccess.findLocationEntityByLocation(Location.Aberdeen)).thenReturn(locationEntityStub);
 
-        oAuth2Client.getBearerToken("applicationName");
-        result = "aToken";
-      }};
+      when(oAuth2Client.getBearerToken(anyString())).thenReturn("aToken");
 
       instance.runSearch(Location.Aberdeen, "applicationName");
 
@@ -177,9 +194,8 @@ public class SearchClientTest {
 
       wireMockServer.stop();
 
-      Assertions.assertTrue(
-        collectedLog.contains("INFO: Call to API did not return OK. Status code: 400")
-      );
+      Assertions.assertThat(collectedLog.contains("INFO: Call to API did not return OK. Status code: 400")).isTrue();
+
     }
 
   }

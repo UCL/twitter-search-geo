@@ -1,6 +1,6 @@
 package uk.ac.ucl.twitter.search.geo;
 
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.ac.ucl.twitter.search.geo.client.ConsumerCredentials;
 
@@ -14,9 +14,7 @@ public class ConsumerCredentialsTest {
       consumerKey, consumerSecret
     );
     String expected = "eHZ6MWV2RlM0d0VFUFRHRUZQSEJvZzpMOHFxOVBaeVJnNmllS0dFS2hab2xHQzB2SldMdzhpRUo4OERSZHlPZw==";
-    Assertions.assertEquals(expected, instance.base64EncodedCredentials());
-
-    ConsumerCredentials instance3 = new ConsumerCredentials(null, "null");
+    Assertions.assertThat(instance.base64EncodedCredentials()).isEqualTo(expected);
   }
 
 }
