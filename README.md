@@ -18,7 +18,41 @@
 
 ### Requirements
 
+- Java 17
+- Glassfish 7
+
 ### Configuration
+
+#### Database connection pool
+
+Configure Glassfish for access to the database
+
+Create a connection pool:
+
+```
+asadmin create-jdbc-connection-pool \
+    --datasourceclassname org.postgresql.ds.PGConnectionPoolDataSource \
+    --restype javax.sql.ConnectionPoolDataSource \
+    --property password=<pass>:databaseName=<dbname>:serverName=<hostname>:user=testdb TwitterSearchGeoPool
+```
+
+Create a JDBC resource:
+
+```
+asadmin create-jdbc-resource --connectionpoolid TwitterSearchGeoPool jdbc/TwitterSearchGeoPool
+```
+
+#### TLS: Root CA certificate
+
+Download the root CA certificate for Twitter API from https://cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
+
+Import the certificate to the CA certs keystore in Glassfish
+
+```
+keytool -import -alias digicertglobal-root-ca \
+        -file DigiCertGlobalRootCA.crt.pem \
+        -keystore /opt/glassfish7/glassfish/domains/domain1/config/cacerts.jks
+```
 
 ### Deployment
 
