@@ -118,10 +118,10 @@ public final class FileHandler {
     openOption = StandardOpenOption.APPEND;
     Files.write(
       path,
-      statusData.getStatuses().getBytes(StandardCharsets.UTF_8),
+      statusData.statuses().getBytes(StandardCharsets.UTF_8),
       openOption
     );
-    return statusData.getMetaData();
+    return statusData.metadata();
   }
 
   /**
@@ -157,27 +157,28 @@ public final class FileHandler {
     final JsonParser jsonParser = Json.createParser(
       new StringReader(jsonResponse)
     );
-    final StatusData statusData = new StatusData();
+    String status = null;
+    Long maxId = null;
+    Integer count = null;
     while (jsonParser.hasNext()) {
       final JsonParser.Event event = jsonParser.next();
       boolean isKeyName = event.equals(JsonParser.Event.KEY_NAME);
       if (isKeyName && jsonParser.getString().equals("statuses")) {
         jsonParser.next();
-        final String status = jsonParser
+        status = jsonParser
           .getArray()
           .toString()
           .trim()
           .replaceAll("^\\[|\\]$", "");
-        statusData.setStatuses(status);
       } else if (isKeyName && jsonParser.getString().equals("max_id")) {
         jsonParser.next();
-        statusData.getMetaData().setMaxId(jsonParser.getLong());
+        maxId = jsonParser.getLong();
       } else if (isKeyName && jsonParser.getString().equals("count")) {
         jsonParser.next();
-        statusData.getMetaData().setCount(jsonParser.getInt());
+        count = jsonParser.getInt();
       }
     }
-    return statusData;
+    return new StatusData(status, new Metadata(maxId, count));
   }
 
 }

@@ -1,55 +1,23 @@
 package uk.ac.ucl.twitter.search.geo.client;
 
+import java.util.Objects;
+
 /**
  * Metadata from the response returned by Twitter API, used for pagination
  * and monitoring.
+ *
+ * @param maxId The latest Twitter ID in the response
+ * @param count The number of Tweets returned
  */
-public class Metadata {
+public record Metadata(Long maxId, Integer count) {
 
   /**
-   * The latest Twitter ID in the response.
+   * Constructor for null checks.
+   * @param maxId The latest Twitter ID in the response
+   * @param count The number of Tweets returned
    */
-  private long maxId = 0L;
-
-  /**
-   * The number of Tweets returned.
-   */
-  private int count = 0;
-
-  /**
-   * Getter for maxId variable.
-   *
-   * @return The latest Twitter ID contained in the response
-   */
-  public long getMaxId() {
-    return maxId;
+  public Metadata {
+    Objects.requireNonNull(maxId);
+    Objects.requireNonNull(count);
   }
-
-  /**
-   * Setter for maxId variable.
-   *
-   * @param l The latest Twitter ID contained in the response
-   */
-  public void setMaxId(final long l) {
-    maxId = l;
-  }
-
-  /**
-   * Getter for count variable.
-   *
-   * @return The number of Tweets returned.
-   */
-  public int getCount() {
-    return count;
-  }
-
-  /**
-   * Setter for count variable.
-   *
-   * @param c The number of Tweets returned.
-   */
-  public void setCount(final int c) {
-    count = c;
-  }
-
 }

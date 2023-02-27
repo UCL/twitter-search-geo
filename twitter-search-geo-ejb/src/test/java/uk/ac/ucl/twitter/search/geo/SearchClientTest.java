@@ -82,7 +82,20 @@ public class SearchClientTest {
           .willReturn(
             aResponse().withHeader("Content-Type", "application/json")
               .withStatus(200)
-              .withBody("{\"response\":\"A response\"}")
+              //.withBody("{\"statuses\":\"A response\"}")
+              .withBody("""
+              {
+                \"statuses\": [
+                  {
+                    \"text\": \"a Text\"
+                  }
+                ],
+                \"search_metadata\": {
+                  \"max_id\": 0,
+                  \"count\": 1
+                }
+              }
+              """)
           )
       );
 

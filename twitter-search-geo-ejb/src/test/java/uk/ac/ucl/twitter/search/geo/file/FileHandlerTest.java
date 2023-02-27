@@ -29,8 +29,8 @@ public class FileHandlerTest {
   public void testWriteStatuses() throws IOException {
     FileHandler instance = new FileHandler(fileName);
     Metadata metadata = instance.writeStatuses(jsonResponse);
-    Assertions.assertEquals(2, metadata.getCount());
-    Assertions.assertEquals(1125490788736032800L, metadata.getMaxId());
+    Assertions.assertEquals(2, metadata.count());
+    Assertions.assertEquals(1125490788736032800L, metadata.maxId());
     instance.deleteFile();
   }
 
@@ -38,11 +38,11 @@ public class FileHandlerTest {
   public void testWriteStatusesAndAppend() throws IOException {
     FileHandler instance = new FileHandler(fileName);
     Metadata metadata = instance.writeStatuses(jsonResponse);
-    Assertions.assertEquals(2, metadata.getCount());
-    Assertions.assertEquals(1125490788736032800L, metadata.getMaxId());
+    Assertions.assertEquals(2, metadata.count());
+    Assertions.assertEquals(1125490788736032800L, metadata.maxId());
     Metadata metadataAdd = instance.writeStatuses(jsonAddResponse);
-    Assertions.assertEquals(2, metadataAdd.getCount());
-    Assertions.assertEquals(1125490788736032802L, metadataAdd.getMaxId());
+    Assertions.assertEquals(2, metadataAdd.count());
+    Assertions.assertEquals(1125490788736032802L, metadataAdd.maxId());
     Path path = Paths.get(System.getProperty("java.io.tmpdir"), fileName);
     int size = Files.readAllLines(path).size();
     Assertions.assertEquals(1, size);

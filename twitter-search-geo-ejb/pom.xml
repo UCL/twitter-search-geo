@@ -133,10 +133,11 @@
         </configuration>
         <executions>
           <execution>
+            <id>checkstyle-check</id>
             <goals>
               <goal>check</goal>
             </goals>
-            <phase>validate</phase>
+            <phase>pre-package</phase>
           </execution>
         </executions>
       </plugin>
@@ -154,6 +155,7 @@
         </configuration>
         <executions>
           <execution>
+            <id>spotbugs-check</id>
             <goals>
               <goal>check</goal>
             </goals>

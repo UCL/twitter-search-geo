@@ -117,8 +117,8 @@ public class SearchClient {
         Metadata metadata = fileHandler.writeStatuses(
           response.readEntity(String.class)
         );
-        locationEntity.setSinceId(metadata.getMaxId());
-        locationEntity.setCount(metadata.getCount());
+        locationEntity.setSinceId(metadata.maxId());
+        locationEntity.setCount(metadata.count());
         locationEntity.setLocation(loc);
         entityAccess.updateLocationEntity(locationEntity);
       } catch (IOException e) {
