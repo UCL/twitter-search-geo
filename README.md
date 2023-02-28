@@ -54,9 +54,36 @@ keytool -import -alias digicertglobal-root-ca \
         -keystore /opt/glassfish7/glassfish/domains/domain1/config/cacerts.jks
 ```
 
+#### API secrets
+
+Add `app1.key` and `app1.secret` password aliases to Glassfish
+
+```
+asadmin create-password-alias
+```
+
+Register these password aliases under a the Java system properties `APP1-KEY` and `APP1-SECRET`
+
+```
+asadmin create-system-properties APP1-KEY='${ALIAS\=app1.key}'
+asadmin create-system-properties APP1-SECRET='${ALIAS\=app1.secret}'
+```
+
 ### Deployment
 
+Deploy the EJB application to Glassfish
+
+```
+asadmin deploy --name <applicationName> <path-to>/twitter-search-geo-ejb.jar
+```
+
 ## Building
+
+Build package with Maven
+
+```
+mvn package
+```
 
 ## Reporting bugs
 

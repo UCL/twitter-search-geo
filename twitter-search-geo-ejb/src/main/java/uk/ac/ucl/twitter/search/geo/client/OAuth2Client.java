@@ -14,6 +14,10 @@ import jakarta.ws.rs.core.Response;
 /**
  * Obtains OAuth2 bearer token from cache or API.
  *
+ * Implements an application-only auth flow as described in
+ * <a href="https://developer.twitter.com/en/docs/authentication/oauth-2-0/application-only">
+ * https://developer.twitter.com/en/docs/authentication/oauth-2-0/application-only</a>
+ *
  * @author David Guzman {@literal d.guzman at ucl.ac.uk}
  * @since 1.0
  */
@@ -120,7 +124,6 @@ public class OAuth2Client {
       BearerToken.class
     );
     return entity.getAccessToken();
-    // return response.readEntity(String.class);
   }
 
 }
