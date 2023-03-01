@@ -9,14 +9,14 @@ import java.util.logging.Logger;
 public class Compressor {
 
   /**
-   * Template for execution of lzop.
-   */
-  private static final String COMMAND_FORMAT = "lzop -9U %s";
-
-  /**
    * Directory from where the lzop compressor must run.
    */
   private final Path fromPath = Paths.get(FileHandler.getSearchGeoDir());
+
+  /**
+   * Template for execution of lzop.
+   */
+  private final String[] command = new String[] {"lzop", "-9U"};
 
   /**
    * Runs lzop compression over the a file collected and referenced by
@@ -25,9 +25,10 @@ public class Compressor {
    * @throws IOException If there are no files to process
    */
   public void lzoCompress(final Path path) throws IOException {
+    command[2] = path.toString();
     Runtime.getRuntime()
       .exec(
-        String.format(COMMAND_FORMAT, path.toString()),
+        command,
         null,
         fromPath.toFile()
       );

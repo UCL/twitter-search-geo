@@ -65,7 +65,7 @@ public class SearchClient {
   /**
    * Activates extended mode, required to retrieve the full text of a tweet.
    */
-  private static final String TWEET_MDDE = "extended";
+  // private static final String TWEET_MDDE = "extended";
 
   /**
    * Provides the OAuth2 bearer token.
