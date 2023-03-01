@@ -78,7 +78,7 @@ public class SearchClientTest {
       // setup stub
       Location loc = Location.Aberdeen;
       wireMockServer.stubFor(
-        get(urlPathEqualTo("/1.1/search/tweets.json"))
+        get(urlPathEqualTo("/2/tweets/search/recent"))
           .willReturn(
             aResponse().withHeader("Content-Type", "application/json")
               .withStatus(200)
@@ -116,15 +116,13 @@ public class SearchClientTest {
       instance.runSearch(Location.Aberdeen, "applicationName");
 
       wireMockServer.verify(
-        getRequestedFor(urlPathEqualTo("/1.1/search/tweets.json"))
+        getRequestedFor(urlPathEqualTo("/2/tweets/search/recent"))
           .withHeader(
             "Authorization",
             equalTo("Bearer aToken")
           )
-          .withQueryParam("query", matching("since:.*"))
-          .withQueryParam("geocode", equalTo(loc.getLatitude() + "," + loc.getLongitude() + "," + loc.getRadius()))
-          .withQueryParam("count", equalTo("100"))
-          .withQueryParam("since_id", equalTo("0"))
+          .withQueryParam("query", equalTo(String.format("point_radius:[%f %f %s]", loc.getLatitude(), loc.getLongitude(), loc.getRadius())))
+          .withQueryParam("max_results", equalTo("100"))
       );
 
       Mockito.verify(entityAccess, times(1)).updateLocationEntity(locationEntityStub);
@@ -167,7 +165,7 @@ public class SearchClientTest {
       // setup stub
       Location loc = Location.Aberdeen;
       wireMockServer.stubFor(
-        get(urlPathEqualTo("/1.1/search/tweets.json"))
+        get(urlPathEqualTo("/2/tweets/search/recent"))
           .willReturn(
             aResponse().withHeader("Content-Type", "application/json")
               .withStatus(400)
@@ -194,15 +192,13 @@ public class SearchClientTest {
       String collectedLog = new String(byteArrayOutputStream.toByteArray());
 
       wireMockServer.verify(
-        getRequestedFor(urlPathEqualTo("/1.1/search/tweets.json"))
+        getRequestedFor(urlPathEqualTo("/2/tweets/search/recent"))
         .withHeader(
           "Authorization",
           equalTo("Bearer aToken")
         )
-        .withQueryParam("query", matching("since:.*"))
-        .withQueryParam("geocode", equalTo(loc.getLatitude() + "," + loc.getLongitude() + "," + loc.getRadius()))
-        .withQueryParam("count", equalTo("100"))
-        .withQueryParam("since_id", equalTo("0"))
+        .withQueryParam("query", equalTo(String.format("point_radius:[%f %f %s]", loc.getLatitude(), loc.getLongitude(), loc.getRadius())))
+        .withQueryParam("max_results", equalTo("100"))
       );
 
       wireMockServer.stop();

@@ -43,8 +43,12 @@ public class SearchClient {
 
   /**
    * Path to the standard search resource.
+   * Search for Tweets published in the last 7 days
+   *
+   * <a href="https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent">
+   * https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent</a>
    */
-  private static final String SEARCH_RESOURCE_PATH =  "/1.1/search/tweets.json";
+  private static final String SEARCH_RESOURCE_PATH =  "/2/tweets/search/recent";
 
   /**
    * Number of tweets to return per page.
@@ -94,16 +98,16 @@ public class SearchClient {
       .findLocationEntityByLocation(loc);
     final String sinceDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
     final Response response = webTarget
-      .queryParam("tweet_mode", TWEET_MDDE)
+      //.queryParam("tweet_mode", TWEET_MDDE)
       .queryParam(
         "query",
-        "since:" + sinceDate
+        String.format("point_radius:[%f %f %s]", loc.getLatitude(), loc.getLongitude(), loc.getRadius())
       ).queryParam(
-        "geocode",
-        loc.getLatitude() + "," + loc.getLongitude() + "," + loc.getRadius()
+        "start_time",
+        String.format("%sT00:00:00Z", sinceDate)
       )
-      .queryParam("count", NUMBER_OF_TWEETS)
-      .queryParam("since_id", locationEntity.getSinceId())
+      .queryParam("max_results", NUMBER_OF_TWEETS)
+      .queryParam("next_token", locationEntity.getNextToken())
       .request(MediaType.APPLICATION_JSON_TYPE)
       .header(
         "Authorization",
@@ -130,7 +134,7 @@ public class SearchClient {
         .log(
           Level.INFO,
           "Call to API did not return OK. Status code: {0}",
-          response.getStatus()
+          response.getStatus() + " " + response.readEntity(String.class)
         );
     }
   }

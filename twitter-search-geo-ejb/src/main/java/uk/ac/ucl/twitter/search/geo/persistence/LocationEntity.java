@@ -44,6 +44,13 @@ public class LocationEntity {
   private long sinceId = 0;
 
   /**
+   * A value that encodes the next 'page' of results that can be requested,
+   * via the next_token request parameter.
+   */
+  @Column(name = "NEXT_TOKEN")
+  private String nextToken;
+
+  /**
    * Named query to find LocationEntity by Location name.
    */
   public static final String QUERY_FIND_BY_LOCATION =
@@ -105,5 +112,21 @@ public class LocationEntity {
    */
   public void setSinceId(final long s) {
     sinceId = s;
+  }
+
+  /**
+   * Getter for the next 'page' of results that can be requested.
+   * @return the token
+   */
+  public String getNextToken() {
+    return nextToken;
+  }
+
+  /**
+   * Setter for the next 'page' of results that can be requested
+   * @param token the pagination token
+   */
+  public void setNextToken(final String token) {
+    this.nextToken = token;
   }
 }
